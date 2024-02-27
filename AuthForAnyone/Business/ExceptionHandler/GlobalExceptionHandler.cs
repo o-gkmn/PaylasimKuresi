@@ -5,8 +5,8 @@ namespace AuthenticationServiceApi.Business.ExceptionHandler
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {
-        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, 
-            Exception exception, 
+        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext,
+            Exception exception,
             CancellationToken cancellationToken)
         {
 

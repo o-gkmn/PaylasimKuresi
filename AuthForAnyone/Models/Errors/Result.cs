@@ -1,8 +1,4 @@
-﻿using AutoMapper.Internal.Mappers;
-using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace AuthForAnyone.Models.Errors
+﻿namespace AuthForAnyone.Models.Errors
 {
     public class Result
     {

@@ -1,6 +1,5 @@
 ﻿using AuthenticationServiceApi.Models.Entities;
 using AuthForAnyone.Models.Errors;
-using Microsoft.AspNetCore.Identity;
 
 namespace AuthenticationServiceApi.Data.Repositories.Abstract
 {

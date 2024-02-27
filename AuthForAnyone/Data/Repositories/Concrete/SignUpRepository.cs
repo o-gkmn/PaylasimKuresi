@@ -2,7 +2,6 @@
 using AuthenticationServiceApi.Models.Entities;
 using AuthForAnyone.Models.Errors;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace AuthenticationServiceApi.Data.Repositories.Concrete
 {
@@ -22,7 +21,7 @@ namespace AuthenticationServiceApi.Data.Repositories.Concrete
 
             var result = await _userManager.CreateAsync(userEntity);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 List<Error> errors = new List<Error>();
                 foreach (var error in result.Errors)
@@ -40,7 +39,7 @@ namespace AuthenticationServiceApi.Data.Repositories.Concrete
         {
             UserEntity? result = await _userManager.FindByNameAsync(userEntity.UserName);
 
-            if(result == null)
+            if (result == null)
             {
                 return false;
             }

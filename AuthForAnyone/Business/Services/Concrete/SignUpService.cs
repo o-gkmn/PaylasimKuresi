@@ -4,7 +4,6 @@ using AuthenticationServiceApi.Models.Dtos.UserDtos;
 using AuthenticationServiceApi.Models.Entities;
 using AuthForAnyone.Models.Errors;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AuthenticationServiceApi.Business.Services.Concrete
 {
@@ -23,7 +22,7 @@ namespace AuthenticationServiceApi.Business.Services.Concrete
         {
             UserEntity mappedUser = _mapper.Map<UserEntity>(signUpUserDto);
 
-            if(await _signUpRepository.IsUserExistAsync(mappedUser))
+            if (await _signUpRepository.IsUserExistAsync(mappedUser))
             {
                 return UserError.UserAlreadyExist;
             }

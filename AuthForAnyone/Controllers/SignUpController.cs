@@ -1,7 +1,6 @@
 ﻿using AuthenticationServiceApi.Business.ActionFilters;
 using AuthenticationServiceApi.Business.Services.Abstract;
 using AuthenticationServiceApi.Models.Dtos.UserDtos;
-using AuthForAnyone.Models.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthenticationServiceApi.Controllers
@@ -22,8 +21,8 @@ namespace AuthenticationServiceApi.Controllers
         public async Task<IActionResult> Register(SignUpUserDto signUpUserDto)
         {
             var resultRegister = await _signUpService.RegisterUserAsync(signUpUserDto);
-            
-            if(!resultRegister.IsSuccess)
+
+            if (!resultRegister.IsSuccess)
             {
                 return new BadRequestObjectResult(resultRegister.ToObject());
             }
