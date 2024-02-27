@@ -20,6 +20,7 @@ namespace AuthenticationServiceApi.Business.ExceptionHandler
 
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
+
             return true;
         }
     }
