@@ -2,6 +2,7 @@
 using AuthenticationServiceApi.Data.Repositories.Abstract;
 using AuthenticationServiceApi.Models.Dtos.UserDtos;
 using AuthenticationServiceApi.Models.Entities;
+using AuthForAnyone.Models.Errors;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,18 @@ namespace AuthenticationServiceApi.Business.Services.Concrete
             _mapper = mapper;
         }
 
-        public async Task RegisterUserAsync(SignUpUserDto signUpUserDto)
+        public async Task<Result> RegisterUserAsync(SignUpUserDto signUpUserDto)
         {
             UserEntity mappedUser = _mapper.Map<UserEntity>(signUpUserDto);
-            await _signUpRepository.RegisterUserAsync(mappedUser, signUpUserDto.Password);
+
+            if(await _signUpRepository.IsUserExistAsync(mappedUser))
+            {
+                return UserError.UserAlreadyExist;
+            }
+
+            var result = await _signUpRepository.RegisterUserAsync(mappedUser, signUpUserDto.Password);
+
+            return result;
         }
     }
 }

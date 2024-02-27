@@ -1,13 +1,14 @@
 ﻿using AuthenticationServiceApi.Business.ActionFilters;
 using AuthenticationServiceApi.Business.Services.Abstract;
 using AuthenticationServiceApi.Models.Dtos.UserDtos;
+using AuthForAnyone.Models.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthenticationServiceApi.Controllers
 {
     [Route("api/sign_up")]
     [ApiController]
-    [RequiredModelValidate]
+    [ModelValidate]
     public class SignUpController : ControllerBase
     {
         private readonly ISignUpService _signUpService;
@@ -20,7 +21,13 @@ namespace AuthenticationServiceApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(SignUpUserDto signUpUserDto)
         {
-            await _signUpService.RegisterUserAsync(signUpUserDto);
+            var resultRegister = await _signUpService.RegisterUserAsync(signUpUserDto);
+            
+            if(!resultRegister.IsSuccess)
+            {
+                return new BadRequestObjectResult(resultRegister.ToObject());
+            }
+
             return Ok();
         }
     }
