@@ -1,33 +1,25 @@
-﻿using AuthenticationServiceApi.Business.ActionFilters;
-using AuthenticationServiceApi.Business.Services.Abstract;
-using AuthenticationServiceApi.Models.Dtos.UserDtos;
+﻿using AuthForAnyone.Filters;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs.UserDTOs;
 
-namespace AuthenticationServiceApi.Controllers
+namespace AuthForAnyone.Controllers;
+
+[Route("api/sign_up")]
+[ApiController]
+[ModelValidate]
+public class SignUpController(ISignUpService signUpService) : ControllerBase
 {
-    [Route("api/sign_up")]
-    [ApiController]
-    [ModelValidate]
-    public class SignUpController : ControllerBase
+    [HttpPost]
+    public async Task<IActionResult> Register(SignUpUserDto signUpUserDto)
     {
-        private readonly ISignUpService _signUpService;
+        var resultRegister = await signUpService.RegisterUserAsync(signUpUserDto);
 
-        public SignUpController(ISignUpService signUpService)
+        if (!resultRegister.IsSuccess)
         {
-            _signUpService = signUpService;
+            return new BadRequestObjectResult(resultRegister.ToObject());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(SignUpUserDto signUpUserDto)
-        {
-            var resultRegister = await _signUpService.RegisterUserAsync(signUpUserDto);
-
-            if (!resultRegister.IsSuccess)
-            {
-                return new BadRequestObjectResult(resultRegister.ToObject());
-            }
-
-            return Ok();
-        }
+        return Ok();
     }
 }

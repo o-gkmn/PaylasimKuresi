@@ -1,7 +1,6 @@
-using AuthenticationServiceApi.Business.ActionFilters;
-using AuthenticationServiceApi.Business.ExceptionHandler;
-using AuthenticationServiceApi.Extensions;
 using System.Reflection;
+using AuthForAnyone.ExceptionHandler;
+using AuthForAnyone.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
