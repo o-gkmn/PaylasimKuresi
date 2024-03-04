@@ -1,9 +1,11 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Services;
 using DataAccess.DbContext;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 using Identity.Models;
+using Infrastructure.Mapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,12 +22,12 @@ public static class ServiceExtensions
 
     public static void ConfigureServices(this IServiceCollection services)
     {
-        services.AddScoped<ISignUpService, SignUpService>();
+        services.AddScoped<ISignService, SignService>();
     }
 
     public static void ConfigureRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ISignUpRepository, SignUpRepository>();
+        services.AddScoped<ISignRepository, SignRepository>();
     }
 
     public static void ConfigureIdentities(this IServiceCollection services)
@@ -41,6 +43,18 @@ public static class ServiceExtensions
                 opts.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<AuthContext>()
+            .AddSignInManager()
             .AddDefaultTokenProviders();
+    }
+
+    public static void ConfigureAutoMapper(this IServiceCollection services)
+    {
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MapperProfile>();
+        });
+
+        IMapper mapper = config.CreateMapper();
+        services.AddSingleton(mapper);
     }
 }

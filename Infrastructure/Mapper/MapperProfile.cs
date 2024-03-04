@@ -9,5 +9,6 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<SignUpUserDto, UserEntity>();
+        CreateMap<SignInUserDto, UserEntity>();
     }
 }

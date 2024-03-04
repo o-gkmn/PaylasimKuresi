@@ -5,15 +5,15 @@ namespace Models.DTOs.UserDTOs;
 
 public class SignUpUserDto
 {
-    [Required(ErrorMessage = "Kullanıcı adı boş olamaz.")]
-    [MinLength(3, ErrorMessage = "Kullanıcı adı 3 karakterden az olamaz.")]
+    [Required(ErrorMessage = "Username cannot be empty!")]
+    [MinLength(3, ErrorMessage = "Username length must be at least 3 characters!")]
     public string UserName { get; set; }
 
-    [Required(ErrorMessage = "Parola boş bırakılamaz")]
-    [MinLength(8, ErrorMessage = "Parola en az 8 karakterli olmalıdır.")]
+    [Required(ErrorMessage = "Password cannot be empty!")]
+    [MinLength(8, ErrorMessage = "Password length must be at least 8 characters!")]
     public string Password { get; set; }
 
-    [Required(ErrorMessage = "EPosta boş bırakılamaz.")]
-    [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Hatalı posta adresi girdiniz.")]
+    [Required(ErrorMessage = "Email cannot be empty")]
+    [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "You have entered the wrong email")]
     public string Email { get; set; }
 }

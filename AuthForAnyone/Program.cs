@@ -14,7 +14,7 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureIdentities();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.ConfigureAutoMapper();
 
 var app = builder.Build();
 
