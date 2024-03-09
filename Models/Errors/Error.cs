@@ -25,5 +25,5 @@ public class ModelError
 
 public class TokenError
 {
-    public static readonly Error InvalidToken = new Error(StatusCodes.Status400BadRequest, "The given token is invalid. Please login again.")
+    public static readonly Error InvalidToken = new Error(StatusCodes.Status400BadRequest, "The given token is invalid. Please login again.");
 }
