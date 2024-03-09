@@ -3,6 +3,7 @@ using Core.Interfaces;
 using DataAccess.Interfaces;
 using Identity.Models;
 using Microsoft.IdentityModel.Tokens;
+using Models.DTOs;
 using Models.DTOs.UserDTOs;
 using Models.Errors;
 
@@ -12,6 +13,7 @@ namespace Core.Services
     {
         private readonly IMapper _mapper;
         private readonly ISignRepository _signRepository;
+        private readonly TokenManager _tokenManager;
 
         public SignService(IMapper mapper, ISignRepository signRepository)
         {
@@ -19,16 +21,17 @@ namespace Core.Services
             _signRepository = signRepository;
         }
 
-        public async Task<Result> SignInAsync(SignInUserDto user)
+        public async Task<Token> SignInAsync(SignInUserDto user)
         {
             var userEntity = _mapper.Map<UserEntity>(user);
 
-            if (userEntity == null) return ModelError.ModelNull;
-            if (user.Password.IsNullOrEmpty()) return ModelError.EmptyPassword;
+            if (userEntity == null) throw ModelError.ModelNull;
+            if (user.Password.IsNullOrEmpty()) throw ModelError.EmptyPassword;
 
             var result = await _signRepository.SignInUserAsync(userEntity, user.Password);
+            var token = _tokenManager.GenerateRefreshToken(userEntity);
 
-            return result;
+            return token;
         }
 
         public Task SignOutAsync(SignInUserDto user)
@@ -38,14 +41,16 @@ namespace Core.Services
      
 
 
-        public async Task<Result> SignUpAsync(SignUpUserDto signUpUserDto)
+        public async Task<Token> SignUpAsync(SignUpUserDto signUpUserDto)
         {
             var userEntity = _mapper.Map<UserEntity>(signUpUserDto);
 
-            if (userEntity is null) return ModelError.ModelNull;
+            if (userEntity is null) throw ModelError.ModelNull;
             var result = await _signRepository.SignUpUserAsync(userEntity, signUpUserDto.Password);
 
-            return result;
+            var token = _tokenManager.GenerateRefreshToken(userEntity);
+
+            return token;
         }
     }
 }
