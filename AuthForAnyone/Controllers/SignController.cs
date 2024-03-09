@@ -20,9 +20,7 @@ namespace AuthForAnyone.Controllers
         {
             var result = await _signService.SignInAsync(signInUserDto);
 
-            if (result.IsFailure) return BadRequest(result);
-
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPost("sign_out")]
@@ -36,9 +34,7 @@ namespace AuthForAnyone.Controllers
         {
             var result = await _signService.SignUpAsync(signUpUserDto);
 
-            if (result.IsFailure) return BadRequest(result);
-
-            return Ok();
+            return Ok(result);
         }
     }
 }
