@@ -35,6 +35,11 @@ namespace Core.Services
         {
             throw new NotImplementedException();
         }
+        public Task SignOutAsync(SignInUserDto user)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<Result> SignUpAsync(SignUpUserDto signUpUserDto)
         {
