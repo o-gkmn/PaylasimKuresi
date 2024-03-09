@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using AutoMapper;
 using Core.Interfaces;
 using Core.Services;
 using DataAccess.DbContext;
@@ -6,8 +7,10 @@ using DataAccess.Interfaces;
 using DataAccess.Repositories;
 using Identity.Models;
 using Infrastructure.Mapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthForAnyone.Extensions;
 
@@ -56,5 +59,17 @@ public static class ServiceExtensions
 
         IMapper mapper = config.CreateMapper();
         services.AddSingleton(mapper);
+    }
+
+    public static void ConfigureJwtBearer(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(
+                authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
+                configureOptions: options =>
+                {
+                    options.IncludeErrorDetails = true;
+                    options.TokenValidationParameters = new TokenManager().AccessTokenManager.GeTokenValidationParameters();
+                });
     }
 }
