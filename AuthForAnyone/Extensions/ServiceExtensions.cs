@@ -69,7 +69,18 @@ public static class ServiceExtensions
                 configureOptions: options =>
                 {
                     options.IncludeErrorDetails = true;
-                    options.TokenValidationParameters = new TokenManager().AccessTokenManager.GeTokenValidationParameters();
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:PrivateKey"])),
+                        ValidAudience = configuration["JWT:Audience"],
+                        ValidIssuer = configuration["JWT:Issuer"],
+                        RequireExpirationTime = true,
+                        RequireAudience = true,
+                        ValidateIssuer = true,
+                        ValidateLifetime = true,
+                        ValidateAudience = true,
+                    };
                 });
     }
 }
