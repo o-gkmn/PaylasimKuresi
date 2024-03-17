@@ -1,17 +1,16 @@
 ﻿using Core.Interfaces;
+using Identity.Interfaces;
 using Identity.Models;
-using Identity.Services;
-using Microsoft.IdentityModel.Tokens;
-using Models.DTOs;
+using Models.DTOs.TokenDTOs;
 using Models.Errors;
 
 namespace Core.Services;
 
 public class TokenManager : ITokenManager
 {
-    private readonly PersonaManager _personaManager;
+    private readonly IPersonaManager _personaManager;
 
-    public TokenManager(PersonaManager personaManager)
+    public TokenManager(IPersonaManager personaManager)
     {
         _personaManager = personaManager;
         _tokenManagerFactory = new TokenManagerFactory();
@@ -22,27 +21,56 @@ public class TokenManager : ITokenManager
     private AccessTokenManager AccessTokenManager { get; set; }
     private RefreshTokenManager RefreshTokenManager { get; set; }
 
-    public TokenValidationParameters GetTokenValidationParameters() => AccessTokenManager.GeTokenValidationParameters();
-    public async Task<Token> GenerateAccessToken(string refreshToken)
+    public async Task<TokenDto> GenerateAccessToken(string refreshToken)
     {
         var isRefreshTokenValid = RefreshTokenManager.ValidateToken(refreshToken);
 
         if (!isRefreshTokenValid) throw TokenError.InvalidToken;
 
-        var principal = RefreshTokenManager.GetPrincipal(refreshToken);
-        if (principal.Identity.Name == null) throw TokenError.InvalidToken;
-        var userEntity = await _personaManager.FindUserByUserName(principal.Identity.Name);
+        var userEntity = await FindUserByRefreshToken(refreshToken);
         var accessToken = AccessTokenManager.GenerateToken(userEntity);
 
-        return new Token(accessToken, refreshToken);
+        return new TokenDto(accessToken, refreshToken);
     }
 
-    public Token GenerateRefreshToken(UserEntity userEntity)
+    public TokenDto GenerateRefreshToken(UserEntity userEntity)
     {
         var refreshToken = RefreshTokenManager.GenerateToken(userEntity);
         var accessToken = AccessTokenManager.GenerateToken(userEntity);
 
-        return new Token(accessToken, refreshToken);
+        return new TokenDto(accessToken, refreshToken);
+    }
+
+    public bool ValidateToken(TokenDto tokenDto)
+    {
+        var isAccessTokenValid = AccessTokenManager.ValidateToken(tokenDto.AccessToken);
+        var isRefreshTokenValid = RefreshTokenManager.ValidateToken(tokenDto.RefreshToken);
+
+        if (isAccessTokenValid && !isRefreshTokenValid)
+        {
+            throw TokenError.RefreshTokenExpired;
+        }
+
+        if (!isAccessTokenValid && isRefreshTokenValid)
+        {
+            throw TokenError.AccessTokenExpired;
+        }
+
+        if (isAccessTokenValid && isRefreshTokenValid)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<UserEntity> FindUserByRefreshToken(string refreshToken)
+    {
+        var principal = RefreshTokenManager.GetPrincipal(refreshToken);
+        if (principal.Identity.Name == null) throw TokenError.InvalidToken;
+        var user = await _personaManager.FindUserByUserNameAsync(principal.Identity.Name);
+
+        return user;
     }
 
     private ITokenManagerFactory _tokenManagerFactory;

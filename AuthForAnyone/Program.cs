@@ -11,9 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.ConfigureIdentities();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
-builder.Services.ConfigureIdentities();
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureJwtBearer(builder.Configuration);
 

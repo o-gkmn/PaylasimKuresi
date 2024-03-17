@@ -8,7 +8,7 @@ public class TokenManagerFactory : ITokenManagerFactory
     {
         return new AccessTokenManager();
     }
-    
+
     public RefreshTokenManager CreateRefreshTokenManager()
     {
         return new RefreshTokenManager();

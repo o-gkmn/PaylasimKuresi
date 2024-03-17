@@ -3,7 +3,7 @@ using Core.Interfaces;
 using DataAccess.Interfaces;
 using Identity.Models;
 using Microsoft.IdentityModel.Tokens;
-using Models.DTOs;
+using Models.DTOs.TokenDTOs;
 using Models.DTOs.UserDTOs;
 using Models.Errors;
 
@@ -13,15 +13,16 @@ namespace Core.Services
     {
         private readonly IMapper _mapper;
         private readonly ISignRepository _signRepository;
-        private readonly TokenManager _tokenManager;
+        private readonly ITokenManager _tokenManager;
 
-        public SignService(IMapper mapper, ISignRepository signRepository)
+        public SignService(IMapper mapper, ISignRepository signRepository, ITokenManager tokenManager)
         {
             _mapper = mapper;
             _signRepository = signRepository;
+            _tokenManager = tokenManager;
         }
 
-        public async Task<Token> SignInAsync(SignInUserDto user)
+        public async Task<TokenDto> SignInAsync(SignInUserDto user)
         {
             var userEntity = _mapper.Map<UserEntity>(user);
 
@@ -38,10 +39,8 @@ namespace Core.Services
         {
             throw new NotImplementedException();
         }
-     
 
-
-        public async Task<Token> SignUpAsync(SignUpUserDto signUpUserDto)
+        public async Task<TokenDto> SignUpAsync(SignUpUserDto signUpUserDto)
         {
             var userEntity = _mapper.Map<UserEntity>(signUpUserDto);
 

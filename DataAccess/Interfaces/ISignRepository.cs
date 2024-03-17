@@ -1,6 +1,4 @@
 ﻿using Identity.Models;
-using Models.DTOs.UserDTOs;
-using Models.Errors;
 
 namespace DataAccess.Interfaces;
 

@@ -18,7 +18,7 @@ public class SignRepository(UserManager<UserEntity> userManager) : ISignReposito
         var result = await userManager.CreateAsync(userEntity);
 
         var identityError = result.Errors.FirstOrDefault();
-        if (identityError != null) throw new Error(Convert.ToInt32(identityError.Code), identityError.Description);
+        if (identityError != null) throw new Error(Convert.ToInt32(identityError.Code), "IdentityError", identityError.Description);
 
         var createdUser = await userManager.FindByNameAsync(userEntity.UserName);
         return createdUser ?? throw UserError.UserNotFound;
@@ -29,10 +29,10 @@ public class SignRepository(UserManager<UserEntity> userManager) : ISignReposito
         if (userEntity.UserName == null) throw ModelError.EmptyUserName;
         var user = await userManager.FindByNameAsync(userEntity.UserName);
 
-        if(user == null) throw UserError.UserNotFound;
+        if (user == null) throw UserError.UserNotFound;
         var isPasswordCorrect = await userManager.CheckPasswordAsync(user, password);
 
         return !isPasswordCorrect ? throw UserError.WrongPassword : user;
     }
-    
+
 }

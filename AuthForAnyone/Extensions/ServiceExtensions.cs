@@ -1,16 +1,18 @@
-﻿using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Core.Interfaces;
 using Core.Services;
 using DataAccess.DbContext;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
+using Identity.Interfaces;
 using Identity.Models;
+using Identity.Services;
 using Infrastructure.Mapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AuthForAnyone.Extensions;
 
@@ -31,6 +33,9 @@ public static class ServiceExtensions
     public static void ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped<ISignRepository, SignRepository>();
+        services.AddScoped<ITokenManager, TokenManager>();
+        services.AddScoped<ITokenManagerFactory, TokenManagerFactory>();
+        services.AddScoped<IPersonaManager, PersonaManager>();
     }
 
     public static void ConfigureIdentities(this IServiceCollection services)

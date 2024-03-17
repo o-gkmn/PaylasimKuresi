@@ -12,4 +12,3 @@ public class MapperProfile : Profile
         CreateMap<SignInUserDto, UserEntity>();
     }
 }
-//hoist the colour are wee

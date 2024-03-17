@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.Errors;
 
-namespace AuthForAnyone.ExceptionHandler;
+namespace APIGateway;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler: IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext,
         Exception exception,
@@ -18,18 +18,12 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         if (exception is Error error)
         {
-            problemDetails = new ProblemDetails
-            {
-                Status = error.Code,
-                Title = error.Description,
-                Type = error.Type
-            };
+            problemDetails.Status = error.Code;
         }
 
         httpContext.Response.StatusCode = problemDetails.Status.Value;
 
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
-
         return true;
     }
 }
