@@ -3,23 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIGateway", "APIGateway", "{0DB7872F-06F9-423E-B2CF-8D434D0CF4DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthForAnyone", "AuthForAnyone\AuthForAnyone.csproj", "{A9BAD466-C4C0-4187-AEDB-F46C7606007D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIGateway", "APIGateway\APIGateway\APIGateway.csproj", "{8F219991-361D-4DEB-8B7A-75076D75B08F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{F6A82C7B-184F-4EEB-ABDB-4339BB2CD6E2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationService", "AuthenticationService", "{5F81E4DE-7408-4A3B-AC9F-F105913485B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{E2BD2E61-849D-47F6-841B-5D84ECC207E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthForAnyone", "AuthenticationService\AuthForAnyone\AuthForAnyone.csproj", "{A9BAD466-C4C0-4187-AEDB-F46C7606007D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "AuthenticationService\Core\Core.csproj", "{F6A82C7B-184F-4EEB-ABDB-4339BB2CD6E2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "AuthenticationService\DataAccess\DataAccess.csproj", "{E2BD2E61-849D-47F6-841B-5D84ECC207E0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "AuthenticationService\Identity\Identity.csproj", "{39AC2F1B-0999-45A0-BECE-7DBF10CA6AFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "Identity\Identity.csproj", "{39AC2F1B-0999-45A0-BECE-7DBF10CA6AFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{E8AB0BEB-5CBB-4EA6-9509-854FC72C6097}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{878F7F3E-7647-42FB-BEAE-ECCE73F020EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middlewares", "Middlewares\Middlewares.csproj", "{F576F881-C2AF-4A7E-A609-15A8927EFEEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +51,10 @@ Global
 		{878F7F3E-7647-42FB-BEAE-ECCE73F020EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{878F7F3E-7647-42FB-BEAE-ECCE73F020EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{878F7F3E-7647-42FB-BEAE-ECCE73F020EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F576F881-C2AF-4A7E-A609-15A8927EFEEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F576F881-C2AF-4A7E-A609-15A8927EFEEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F576F881-C2AF-4A7E-A609-15A8927EFEEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F576F881-C2AF-4A7E-A609-15A8927EFEEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
