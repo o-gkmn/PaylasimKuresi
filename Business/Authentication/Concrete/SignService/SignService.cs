@@ -1,11 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.Interfaces;
 using DataAccess.Interfaces;
 using Identity.Models;
 using Microsoft.IdentityModel.Tokens;
-using Models.DTOs.TokenDTOs;
-using Models.DTOs.UserDTOs;
-using Models.Errors;
 
 namespace Core.Services
 {

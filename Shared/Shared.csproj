@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\AuthenticationService\Identity\Identity.csproj" />
   </ItemGroup>
 
 </Project>
