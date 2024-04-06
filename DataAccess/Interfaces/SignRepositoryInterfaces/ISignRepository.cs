@@ -1,6 +1,6 @@
-﻿using Identity.Models;
+﻿using Models.Entities;
 
-namespace DataAccess.Interfaces;
+namespace DataAccess.Interfaces.SignRepositoryInterfaces;
 
 public interface ISignRepository
 {

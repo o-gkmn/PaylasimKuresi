@@ -1,16 +1,19 @@
-﻿using Identity.Models;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Models.Entities;
 using Models.Errors;
+using Shared.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Core.Abstract;
+namespace Business.Authentication.Abstract;
 
 public abstract class TokenManagerBase
 {
     protected TokenManagerBase()
     {
-        Configuration = CreateInstanceOfIConfiguration();
+        Configuration = ConfigurationFactory.GetInstance().Configuration;
         TokenValidationParameters = new TokenValidationParameters()
         {
             IssuerSigningKey =
@@ -81,20 +84,5 @@ public abstract class TokenManagerBase
         var privateKey = jwtSettings["PrivateKey"];
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateKey));
         return new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-    }
-
-    private IConfiguration CreateInstanceOfIConfiguration()
-    {
-        return new ConfigurationBuilder()
-            .SetBasePath(ApplicationDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-    }
-
-    private string ApplicationDirectory()
-    {
-        var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        var appRoot = Path.GetDirectoryName(location);
-        return appRoot;
     }
 }

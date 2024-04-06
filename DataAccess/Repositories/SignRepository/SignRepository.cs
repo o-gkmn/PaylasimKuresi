@@ -1,9 +1,9 @@
-﻿using DataAccess.Interfaces;
-using Identity.Models;
+﻿using DataAccess.Interfaces.SignRepositoryInterfaces;
 using Microsoft.AspNetCore.Identity;
+using Models.Entities;
 using Models.Errors;
 
-namespace DataAccess.Repositories;
+namespace DataAccess.Repositories.SignRepository;
 
 public class SignRepository(UserManager<UserEntity> userManager) : ISignRepository
 {

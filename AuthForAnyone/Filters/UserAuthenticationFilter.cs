@@ -1,4 +1,4 @@
-﻿using Core.Interfaces;
+﻿using Business.Authentication.Interfaces.TokenManagerInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Models.DTOs.TokenDTOs;

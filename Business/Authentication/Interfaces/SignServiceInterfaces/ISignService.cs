@@ -1,7 +1,7 @@
 ﻿using Models.DTOs.TokenDTOs;
 using Models.DTOs.UserDTOs;
 
-namespace Core.Interfaces
+namespace Business.Authentication.Interfaces.SignServiceInterfaces
 {
     public interface ISignService
     {

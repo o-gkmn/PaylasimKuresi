@@ -1,17 +1,19 @@
 ﻿using AutoMapper;
-using Core.Interfaces;
-using Core.Services;
+using Business.Authentication.Concrete.SignService;
+using Business.Authentication.Concrete.TokenService;
+using Business.Authentication.Interfaces.SignServiceInterfaces;
+using Business.Authentication.Interfaces.TokenManagerInterfaces;
 using DataAccess.DbContext;
-using DataAccess.Interfaces;
-using DataAccess.Repositories;
-using Identity.Interfaces;
-using Identity.Models;
-using Identity.Services;
-using Infrastructure.Mapper;
+using DataAccess.Interfaces.SignRepositoryInterfaces;
+using DataAccess.Interfaces.UserRepositoryInterfaces;
+using DataAccess.Repositories.SignRepository;
+using DataAccess.Repositories.UserRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models.Entities;
+using Shared.Mapper;
 using System.Text;
 
 namespace AuthForAnyone.Extensions;
@@ -20,7 +22,7 @@ public static class ServiceExtensions
 {
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AuthContext>(
+        services.AddDbContext<EFContext>(
             options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")
             ));
     }
@@ -35,7 +37,7 @@ public static class ServiceExtensions
         services.AddScoped<ISignRepository, SignRepository>();
         services.AddScoped<ITokenManager, TokenManager>();
         services.AddScoped<ITokenManagerFactory, TokenManagerFactory>();
-        services.AddScoped<IPersonaManager, PersonaManager>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     public static void ConfigureIdentities(this IServiceCollection services)
@@ -50,7 +52,7 @@ public static class ServiceExtensions
 
                 opts.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<AuthContext>()
+            .AddEntityFrameworkStores<EFContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();
     }

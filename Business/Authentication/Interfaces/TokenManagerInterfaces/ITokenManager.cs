@@ -1,7 +1,7 @@
-﻿using Identity.Models;
-using Models.DTOs.TokenDTOs;
+﻿using Models.DTOs.TokenDTOs;
+using Models.Entities;
 
-namespace Core.Interfaces;
+namespace Business.Authentication.Interfaces.TokenManagerInterfaces;
 
 public interface ITokenManager
 {

@@ -1,17 +1,17 @@
-﻿using Core.Abstract;
-using Identity.Models;
+﻿using Business.Authentication.Abstract;
 using Microsoft.IdentityModel.Tokens;
+using Models.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace Core.Services;
+namespace Business.Authentication.Concrete.TokenService;
 
 public class RefreshTokenManager : TokenManagerBase
 {
     public new string GenerateToken(UserEntity userEntity) => base.GenerateToken(userEntity);
     public new bool ValidateToken(string token) => base.ValidateToken(token);
     public new ClaimsPrincipal? GetPrincipal(string token) => base.GetPrincipal(token);
-    public TokenValidationParameters GeTokenValidationParameters() => base.TokenValidationParameters;
+    public TokenValidationParameters GeTokenValidationParameters() => TokenValidationParameters;
 
     protected override SecurityToken GetTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
     {

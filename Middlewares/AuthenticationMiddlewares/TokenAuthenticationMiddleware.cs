@@ -1,9 +1,11 @@
-﻿using Models.DTOs.TokenDTOs;
+﻿using Microsoft.AspNetCore.Http;
+using Models.DTOs.TokenDTOs;
 using Models.Errors;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
 
-namespace APIGateway;
+namespace Middlewares.AuthenticationMiddlewares;
 
 public class TokenAuthenticationMiddleware
 {
@@ -30,7 +32,7 @@ public class TokenAuthenticationMiddleware
         }
         return;
     }
-    
+
     private async Task<bool> CheckTokensExpirationsAsync(HttpContext httpContext, HttpResponseMessage httpResponseMessage)
     {
         var oldToken = ExtractTokenFromHeaders(httpContext);

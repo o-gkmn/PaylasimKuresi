@@ -1,18 +1,18 @@
-﻿using Core.Interfaces;
-using Identity.Interfaces;
-using Identity.Models;
+﻿using Business.Authentication.Interfaces.TokenManagerInterfaces;
+using DataAccess.Interfaces.UserRepositoryInterfaces;
 using Models.DTOs.TokenDTOs;
+using Models.Entities;
 using Models.Errors;
 
-namespace Core.Services;
+namespace Business.Authentication.Concrete.TokenService;
 
 public class TokenManager : ITokenManager
 {
-    private readonly IPersonaManager _personaManager;
+    private readonly IUserRepository _userRepository;
 
-    public TokenManager(IPersonaManager personaManager)
+    public TokenManager(IUserRepository userRepository)
     {
-        _personaManager = personaManager;
+        _userRepository = userRepository;
         _tokenManagerFactory = new TokenManagerFactory();
         AccessTokenManager = _tokenManagerFactory.CreateAccessTokenManager();
         RefreshTokenManager = _tokenManagerFactory.CreateRefreshTokenManager();
@@ -68,7 +68,7 @@ public class TokenManager : ITokenManager
     {
         var principal = RefreshTokenManager.GetPrincipal(refreshToken);
         if (principal.Identity.Name == null) throw TokenError.InvalidToken;
-        var user = await _personaManager.FindUserByUserNameAsync(principal.Identity.Name);
+        var user = await _userRepository.FindUserByUserNameAsync(principal.Identity.Name);
 
         return user;
     }

@@ -1,10 +1,14 @@
 using AutoMapper;
-using Core.Interfaces;
-using DataAccess.Interfaces;
-using Identity.Models;
+using Business.Authentication.Interfaces.SignServiceInterfaces;
+using Business.Authentication.Interfaces.TokenManagerInterfaces;
+using DataAccess.Interfaces.SignRepositoryInterfaces;
 using Microsoft.IdentityModel.Tokens;
+using Models.DTOs.TokenDTOs;
+using Models.DTOs.UserDTOs;
+using Models.Entities;
+using Models.Errors;
 
-namespace Core.Services
+namespace Business.Authentication.Concrete.SignService
 {
     public class SignService : ISignService
     {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Identity.Models;
 using Models.DTOs.UserDTOs;
+using Models.Entities;
 
-namespace Infrastructure.Mapper;
+namespace Shared.Mapper;
 
 public class MapperProfile : Profile
 {

@@ -1,6 +1,6 @@
-﻿using Core.Services;
+﻿using Business.Authentication.Concrete.TokenService;
 
-namespace Core.Interfaces;
+namespace Business.Authentication.Interfaces.TokenManagerInterfaces;
 
 public interface ITokenManagerFactory
 {
