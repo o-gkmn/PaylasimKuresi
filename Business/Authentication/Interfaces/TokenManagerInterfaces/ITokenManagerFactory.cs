@@ -1,9 +1,10 @@
 ﻿using Business.Authentication.Concrete.TokenService;
 
-namespace Business.Authentication.Interfaces.TokenManagerInterfaces;
-
-public interface ITokenManagerFactory
+namespace Business.Authentication.Interfaces.TokenManagerInterfaces
 {
-    public AccessTokenManager CreateAccessTokenManager();
-    public RefreshTokenManager CreateRefreshTokenManager();
+    public interface ITokenManagerFactory
+    {
+        public AccessTokenManager CreateAccessTokenManager();
+        public RefreshTokenManager CreateRefreshTokenManager();
+    }
 }

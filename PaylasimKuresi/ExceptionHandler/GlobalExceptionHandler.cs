@@ -2,34 +2,35 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.Errors;
 
-namespace AuthForAnyone.ExceptionHandler;
-
-public class GlobalExceptionHandler : IExceptionHandler
+namespace AuthForAnyone.ExceptionHandler
 {
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext,
-        Exception exception,
-        CancellationToken cancellationToken)
+    public class GlobalExceptionHandler : IExceptionHandler
     {
-        var problemDetails = new ProblemDetails
+        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext,
+            Exception exception,
+            CancellationToken cancellationToken)
         {
-            Status = StatusCodes.Status500InternalServerError,
-            Title = exception.Message
-        };
-
-        if (exception is Error error)
-        {
-            problemDetails = new ProblemDetails
+            var problemDetails = new ProblemDetails
             {
-                Status = error.Code,
-                Title = error.Description,
-                Type = error.Type
+                Status = StatusCodes.Status500InternalServerError,
+                Title = exception.Message
             };
+
+            if (exception is Error error)
+            {
+                problemDetails = new ProblemDetails
+                {
+                    Status = error.Code,
+                    Title = error.Description,
+                    Type = error.Type
+                };
+            }
+
+            httpContext.Response.StatusCode = problemDetails.Status.Value;
+
+            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+
+            return true;
         }
-
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
-
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
-
-        return true;
     }
 }

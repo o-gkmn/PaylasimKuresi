@@ -4,71 +4,72 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Models.DTOs.TokenDTOs;
 using Models.Errors;
 
-namespace AuthForAnyone.Filters;
-
-public class UserAuthenticationFilter(ITokenManager tokenManager) : Attribute, IAsyncAuthorizationFilter
+namespace AuthForAnyone.Filters
 {
-    private readonly ITokenManager _tokenManager = tokenManager;
-
-    public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+    public class UserAuthenticationFilter(ITokenManager tokenManager) : Attribute, IAsyncAuthorizationFilter
     {
-        try
+        private readonly ITokenManager _tokenManager = tokenManager;
+
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            if (UserIsAuthenticated(context))
+            try
             {
+                if (UserIsAuthenticated(context))
+                {
+                    return;
+                }
+
+                context.Result = new UnauthorizedResult();
                 return;
             }
-
-            context.Result = new UnauthorizedResult();
-            return;
-        }
-        catch (Error ex)
-        {
-            var oldToken = ExtractTokenFromHeaders(context);
-
-            if (ex.Code == TokenError.AccessTokenExpired.Code &&
-                ex.Description == TokenError.AccessTokenExpired.Description)
+            catch (Error ex)
             {
-                var newToken = await _tokenManager.GenerateAccessToken(oldToken.RefreshToken);
+                var oldToken = ExtractTokenFromHeaders(context);
 
-                AssignNewTokenToHeader(context, newToken);
-            }
+                if (ex.Code == TokenError.AccessTokenExpired.Code &&
+                    ex.Description == TokenError.AccessTokenExpired.Description)
+                {
+                    var newToken = await _tokenManager.GenerateAccessToken(oldToken.RefreshToken);
 
-            if (ex.Code == TokenError.RefreshTokenExpired.Code &&
-                ex.Description == TokenError.RefreshTokenExpired.Description)
-            {
-                var user = await _tokenManager.FindUserByRefreshToken(oldToken.RefreshToken);
-                if (user == null) throw TokenError.InvalidToken;
+                    AssignNewTokenToHeader(context, newToken);
+                }
 
-                var newToken = _tokenManager.GenerateRefreshToken(user);
-                AssignNewTokenToHeader(context, newToken);
+                if (ex.Code == TokenError.RefreshTokenExpired.Code &&
+                    ex.Description == TokenError.RefreshTokenExpired.Description)
+                {
+                    var user = await _tokenManager.FindUserByRefreshToken(oldToken.RefreshToken);
+                    if (user == null) throw TokenError.InvalidToken;
+
+                    var newToken = _tokenManager.GenerateRefreshToken(user);
+                    AssignNewTokenToHeader(context, newToken);
+                }
             }
         }
-    }
 
-    private bool UserIsAuthenticated(AuthorizationFilterContext context)
-    {
-        var token = ExtractTokenFromHeaders(context);
-        var result = _tokenManager.ValidateToken(token);
-        return result;
-    }
-
-    private TokenDto ExtractTokenFromHeaders(AuthorizationFilterContext context)
-    {
-        var accessToken = context.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-        var refreshToken = context.HttpContext.Request.Headers["Refresh-Token"].ToString();
-
-        if (accessToken == string.Empty || refreshToken == string.Empty)
+        private bool UserIsAuthenticated(AuthorizationFilterContext context)
         {
-            throw TokenError.MissingToken;
+            var token = ExtractTokenFromHeaders(context);
+            var result = _tokenManager.ValidateToken(token);
+            return result;
         }
 
-        return new TokenDto(accessToken, refreshToken);
-    }
+        private TokenDto ExtractTokenFromHeaders(AuthorizationFilterContext context)
+        {
+            var accessToken = context.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var refreshToken = context.HttpContext.Request.Headers["Refresh-Token"].ToString();
 
-    private void AssignNewTokenToHeader(AuthorizationFilterContext context, TokenDto tokenDto)
-    {
-        context.HttpContext.Response.Headers["Authorization"] = "Bearer " + tokenDto.AccessToken;
-        context.HttpContext.Response.Headers["Refresh-Token"] = tokenDto.RefreshToken;
+            if (accessToken == string.Empty || refreshToken == string.Empty)
+            {
+                throw TokenError.MissingToken;
+            }
+
+            return new TokenDto(accessToken, refreshToken);
+        }
+
+        private void AssignNewTokenToHeader(AuthorizationFilterContext context, TokenDto tokenDto)
+        {
+            context.HttpContext.Response.Headers["Authorization"] = "Bearer " + tokenDto.AccessToken;
+            context.HttpContext.Response.Headers["Refresh-Token"] = tokenDto.RefreshToken;
+        }
     }
 }

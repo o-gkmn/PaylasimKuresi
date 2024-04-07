@@ -1,16 +1,17 @@
 ﻿using Business.Authentication.Interfaces.TokenManagerInterfaces;
 
-namespace Business.Authentication.Concrete.TokenService;
-
-public class TokenManagerFactory : ITokenManagerFactory
+namespace Business.Authentication.Concrete.TokenService
 {
-    public AccessTokenManager CreateAccessTokenManager()
+    public class TokenManagerFactory : ITokenManagerFactory
     {
-        return new AccessTokenManager();
-    }
+        public AccessTokenManager CreateAccessTokenManager()
+        {
+            return new AccessTokenManager();
+        }
 
-    public RefreshTokenManager CreateRefreshTokenManager()
-    {
-        return new RefreshTokenManager();
+        public RefreshTokenManager CreateRefreshTokenManager()
+        {
+            return new RefreshTokenManager();
+        }
     }
 }

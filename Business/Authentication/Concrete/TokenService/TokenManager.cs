@@ -4,74 +4,75 @@ using Models.DTOs.TokenDTOs;
 using Models.Entities;
 using Models.Errors;
 
-namespace Business.Authentication.Concrete.TokenService;
-
-public class TokenManager : ITokenManager
+namespace Business.Authentication.Concrete.TokenService
 {
-    private readonly IUserRepository _userRepository;
-
-    public TokenManager(IUserRepository userRepository)
+    public class TokenManager : ITokenManager
     {
-        _userRepository = userRepository;
-        _tokenManagerFactory = new TokenManagerFactory();
-        AccessTokenManager = _tokenManagerFactory.CreateAccessTokenManager();
-        RefreshTokenManager = _tokenManagerFactory.CreateRefreshTokenManager();
-    }
+        private readonly IUserRepository _userRepository;
 
-    private AccessTokenManager AccessTokenManager { get; set; }
-    private RefreshTokenManager RefreshTokenManager { get; set; }
-
-    public async Task<TokenDto> GenerateAccessToken(string refreshToken)
-    {
-        var isRefreshTokenValid = RefreshTokenManager.ValidateToken(refreshToken);
-
-        if (!isRefreshTokenValid) throw TokenError.InvalidToken;
-
-        var userEntity = await FindUserByRefreshToken(refreshToken);
-        var accessToken = AccessTokenManager.GenerateToken(userEntity);
-
-        return new TokenDto(accessToken, refreshToken);
-    }
-
-    public TokenDto GenerateRefreshToken(User userEntity)
-    {
-        var refreshToken = RefreshTokenManager.GenerateToken(userEntity);
-        var accessToken = AccessTokenManager.GenerateToken(userEntity);
-
-        return new TokenDto(accessToken, refreshToken);
-    }
-
-    public bool ValidateToken(TokenDto tokenDto)
-    {
-        var isAccessTokenValid = AccessTokenManager.ValidateToken(tokenDto.AccessToken);
-        var isRefreshTokenValid = RefreshTokenManager.ValidateToken(tokenDto.RefreshToken);
-
-        if (isAccessTokenValid && !isRefreshTokenValid)
+        public TokenManager(IUserRepository userRepository)
         {
-            throw TokenError.RefreshTokenExpired;
+            _userRepository = userRepository;
+            _tokenManagerFactory = new TokenManagerFactory();
+            AccessTokenManager = _tokenManagerFactory.CreateAccessTokenManager();
+            RefreshTokenManager = _tokenManagerFactory.CreateRefreshTokenManager();
         }
 
-        if (!isAccessTokenValid && isRefreshTokenValid)
+        private AccessTokenManager AccessTokenManager { get; set; }
+        private RefreshTokenManager RefreshTokenManager { get; set; }
+
+        public async Task<TokenDto> GenerateAccessToken(string refreshToken)
         {
-            throw TokenError.AccessTokenExpired;
+            var isRefreshTokenValid = RefreshTokenManager.ValidateToken(refreshToken);
+
+            if (!isRefreshTokenValid) throw TokenError.InvalidToken;
+
+            var userEntity = await FindUserByRefreshToken(refreshToken);
+            var accessToken = AccessTokenManager.GenerateToken(userEntity);
+
+            return new TokenDto(accessToken, refreshToken);
         }
 
-        if (isAccessTokenValid && isRefreshTokenValid)
+        public TokenDto GenerateRefreshToken(User userEntity)
         {
-            return true;
+            var refreshToken = RefreshTokenManager.GenerateToken(userEntity);
+            var accessToken = AccessTokenManager.GenerateToken(userEntity);
+
+            return new TokenDto(accessToken, refreshToken);
         }
 
-        return false;
+        public bool ValidateToken(TokenDto tokenDto)
+        {
+            var isAccessTokenValid = AccessTokenManager.ValidateToken(tokenDto.AccessToken);
+            var isRefreshTokenValid = RefreshTokenManager.ValidateToken(tokenDto.RefreshToken);
+
+            if (isAccessTokenValid && !isRefreshTokenValid)
+            {
+                throw TokenError.RefreshTokenExpired;
+            }
+
+            if (!isAccessTokenValid && isRefreshTokenValid)
+            {
+                throw TokenError.AccessTokenExpired;
+            }
+
+            if (isAccessTokenValid && isRefreshTokenValid)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<User> FindUserByRefreshToken(string refreshToken)
+        {
+            var principal = RefreshTokenManager.GetPrincipal(refreshToken);
+            if (principal.Identity.Name == null) throw TokenError.InvalidToken;
+            var user = await _userRepository.FindUserByUserNameAsync(principal.Identity.Name);
+
+            return user;
+        }
+
+        private ITokenManagerFactory _tokenManagerFactory;
     }
-
-    public async Task<User> FindUserByRefreshToken(string refreshToken)
-    {
-        var principal = RefreshTokenManager.GetPrincipal(refreshToken);
-        if (principal.Identity.Name == null) throw TokenError.InvalidToken;
-        var user = await _userRepository.FindUserByUserNameAsync(principal.Identity.Name);
-
-        return user;
-    }
-
-    private ITokenManagerFactory _tokenManagerFactory;
 }

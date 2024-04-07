@@ -2,13 +2,14 @@
 using Models.DTOs.UserDTOs;
 using Models.Entities;
 
-namespace Shared.Mapper;
-
-public class MapperProfile : Profile
+namespace Shared.Mapper
 {
-    public MapperProfile()
+    public class MapperProfile : Profile
     {
-        CreateMap<SignUpUserDto, User>().ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => DateTime.Parse(src.DateOfBirth)));
-        CreateMap<SignInUserDto, User>();
+        public MapperProfile()
+        {
+            CreateMap<SignUpUserDto, User>().ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => DateTime.Parse(src.DateOfBirth)));
+            CreateMap<SignInUserDto, User>();
+        }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using Models.DTOs.TokenDTOs;
 using Models.Entities;
 
-namespace Business.Authentication.Interfaces.TokenManagerInterfaces;
-
-public interface ITokenManager
+namespace Business.Authentication.Interfaces.TokenManagerInterfaces
 {
-    Task<TokenDto> GenerateAccessToken(string refreshToken);
-    TokenDto GenerateRefreshToken(User userEntity);
-    bool ValidateToken(TokenDto tokenDto);
-    Task<User> FindUserByRefreshToken(string refreshToken);
+    public interface ITokenManager
+    {
+        Task<TokenDto> GenerateAccessToken(string refreshToken);
+        TokenDto GenerateRefreshToken(User userEntity);
+        bool ValidateToken(TokenDto tokenDto);
+        Task<User> FindUserByRefreshToken(string refreshToken);
+    }
 }
