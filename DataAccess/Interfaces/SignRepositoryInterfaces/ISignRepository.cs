@@ -4,6 +4,6 @@ namespace DataAccess.Interfaces.SignRepositoryInterfaces;
 
 public interface ISignRepository
 {
-    public Task<UserEntity> SignUpUserAsync(UserEntity userEntity, string password);
-    public Task<UserEntity> SignInUserAsync(UserEntity userEntity, string password);
+    public Task<User> SignUpUserAsync(User userEntity, string password);
+    public Task<User> SignInUserAsync(User userEntity, string password);
 }

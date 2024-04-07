@@ -8,7 +8,7 @@ namespace Business.Authentication.Concrete.TokenService;
 
 public class AccessTokenManager : TokenManagerBase
 {
-    public new string GenerateToken(UserEntity userEntity) => base.GenerateToken(userEntity);
+    public new string GenerateToken(User userEntity) => base.GenerateToken(userEntity);
     public new bool ValidateToken(string token) => base.ValidateToken(token);
     public new ClaimsPrincipal? GetPrincipal(string token) => base.GetPrincipal(token);
     public TokenValidationParameters GeTokenValidationParameters() => TokenValidationParameters;
@@ -27,7 +27,7 @@ public class AccessTokenManager : TokenManagerBase
         return tokenOptions;
     }
 
-    protected override List<Claim> GetClaims(UserEntity userEntity)
+    protected override List<Claim> GetClaims(User userEntity)
     {
         var claims = new List<Claim>()
         {

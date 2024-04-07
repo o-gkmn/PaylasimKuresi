@@ -4,4 +4,4 @@ using Models.Entities;
 
 namespace DataAccess.DbContext;
 
-public class EFContext(DbContextOptions options) : IdentityDbContext<UserEntity, RoleEntity, Guid>(options);
+public class EFContext(DbContextOptions options) : IdentityDbContext<User, Role, Guid>(options);

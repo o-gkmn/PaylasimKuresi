@@ -2,7 +2,7 @@
 
 namespace Models.Entities
 {
-    public class RoleEntity : IdentityRole<Guid>
+    public class Role : IdentityRole<Guid>
     {
     }
 }

@@ -31,10 +31,10 @@ public abstract class TokenManagerBase
     protected IConfiguration Configuration { get; }
     protected TokenValidationParameters TokenValidationParameters { get; }
 
-    protected abstract List<Claim> GetClaims(UserEntity userEntity);
+    protected abstract List<Claim> GetClaims(User userEntity);
     protected abstract SecurityToken GetTokenOptions(SigningCredentials signingCredentials, List<Claim> claims);
 
-    protected virtual string GenerateToken(UserEntity userEntity)
+    protected virtual string GenerateToken(User userEntity)
     {
         var signingCredentials = GetSigningCredentials();
         var claims = GetClaims(userEntity);

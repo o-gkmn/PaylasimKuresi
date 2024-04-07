@@ -7,20 +7,20 @@ namespace DataAccess.Repositories.UserRepository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserManager<UserEntity> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public UserRepository(UserManager<UserEntity> userManager)
+        public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task<UserEntity> FindUserByUserNameAsync(string userName)
+        public async Task<User> FindUserByUserNameAsync(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
             return user ?? throw UserError.UserNotFound;
         }
 
-        public async Task<UserEntity> FindByEmailAsync(string email)
+        public async Task<User> FindByEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             return user ?? throw UserError.UserNotFound;

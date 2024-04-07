@@ -25,7 +25,7 @@ namespace Business.Authentication.Concrete.SignService
 
         public async Task<TokenDto> SignInAsync(SignInUserDto user)
         {
-            var userEntity = _mapper.Map<UserEntity>(user);
+            var userEntity = _mapper.Map<User>(user);
 
             if (userEntity == null) throw ModelError.ModelNull;
             if (user.Password.IsNullOrEmpty()) throw ModelError.EmptyPassword;
@@ -43,7 +43,7 @@ namespace Business.Authentication.Concrete.SignService
 
         public async Task<TokenDto> SignUpAsync(SignUpUserDto signUpUserDto)
         {
-            var userEntity = _mapper.Map<UserEntity>(signUpUserDto);
+            var userEntity = _mapper.Map<User>(signUpUserDto);
 
             if (userEntity is null) throw ModelError.ModelNull;
             var result = await _signRepository.SignUpUserAsync(userEntity, signUpUserDto.Password);

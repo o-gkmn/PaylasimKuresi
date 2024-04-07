@@ -8,7 +8,7 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<SignUpUserDto, UserEntity>();
-        CreateMap<SignInUserDto, UserEntity>();
+        CreateMap<SignUpUserDto, User>().ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => DateTime.Parse(src.DateOfBirth)));
+        CreateMap<SignInUserDto, User>();
     }
 }

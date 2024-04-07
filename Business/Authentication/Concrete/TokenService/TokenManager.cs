@@ -33,7 +33,7 @@ public class TokenManager : ITokenManager
         return new TokenDto(accessToken, refreshToken);
     }
 
-    public TokenDto GenerateRefreshToken(UserEntity userEntity)
+    public TokenDto GenerateRefreshToken(User userEntity)
     {
         var refreshToken = RefreshTokenManager.GenerateToken(userEntity);
         var accessToken = AccessTokenManager.GenerateToken(userEntity);
@@ -64,7 +64,7 @@ public class TokenManager : ITokenManager
         return false;
     }
 
-    public async Task<UserEntity> FindUserByRefreshToken(string refreshToken)
+    public async Task<User> FindUserByRefreshToken(string refreshToken)
     {
         var principal = RefreshTokenManager.GetPrincipal(refreshToken);
         if (principal.Identity.Name == null) throw TokenError.InvalidToken;

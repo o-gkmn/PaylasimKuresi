@@ -5,9 +5,9 @@ using Models.Errors;
 
 namespace DataAccess.Repositories.SignRepository;
 
-public class SignRepository(UserManager<UserEntity> userManager) : ISignRepository
+public class SignRepository(UserManager<User> userManager) : ISignRepository
 {
-    public async Task<UserEntity> SignUpUserAsync(UserEntity userEntity, string password)
+    public async Task<User> SignUpUserAsync(User userEntity, string password)
     {
         var user = await userManager.FindByNameAsync(userEntity.UserName);
         if (user != null) throw UserError.UserAlreadyExist;
@@ -24,7 +24,7 @@ public class SignRepository(UserManager<UserEntity> userManager) : ISignReposito
         return createdUser ?? throw UserError.UserNotFound;
     }
 
-    public async Task<UserEntity> SignInUserAsync(UserEntity userEntity, string password)
+    public async Task<User> SignInUserAsync(User userEntity, string password)
     {
         if (userEntity.UserName == null) throw ModelError.EmptyUserName;
         var user = await userManager.FindByNameAsync(userEntity.UserName);

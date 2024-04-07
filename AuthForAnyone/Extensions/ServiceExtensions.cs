@@ -42,7 +42,7 @@ public static class ServiceExtensions
 
     public static void ConfigureIdentities(this IServiceCollection services)
     {
-        services.AddIdentity<UserEntity, RoleEntity>(opts =>
+        services.AddIdentity<User, Role>(opts =>
             {
                 opts.Password.RequireDigit = true;
                 opts.Password.RequireLowercase = false;
