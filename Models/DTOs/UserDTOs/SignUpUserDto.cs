@@ -16,4 +16,9 @@ public class SignUpUserDto
     [Required(ErrorMessage = "Email cannot be empty")]
     [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "You have entered the wrong email")]
     public string Email { get; set; }
+    public string FullName { get; set; }
+    public string ProfilePicture { get; set; }
+    public string Description { get; set; }
+    public string DateOfBirth { get; set; }
+    public string Gender { get; set; }
 }
