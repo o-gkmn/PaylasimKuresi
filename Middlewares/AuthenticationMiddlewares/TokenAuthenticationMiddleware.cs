@@ -3,20 +3,13 @@ using Models.DTOs.TokenDTOs;
 using Models.Errors;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Net.Http;
 
 namespace Middlewares.AuthenticationMiddlewares;
 
-public class TokenAuthenticationMiddleware
+public class TokenAuthenticationMiddleware(RequestDelegate next, IHttpClientFactory httpClientFactory)
 {
-    private readonly RequestDelegate next;
-    private HttpClient _httpClient;
-
-    public TokenAuthenticationMiddleware(RequestDelegate next, IHttpClientFactory httpClientFactory)
-    {
-        this.next = next;
-        _httpClient = httpClientFactory.CreateClient();
-    }
+    private readonly RequestDelegate _next = next;
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient();
 
     public async Task InvokeAsync(HttpContext httpContext)
     {
@@ -30,7 +23,7 @@ public class TokenAuthenticationMiddleware
             if (!isTokensExpirations) await ResponseErrorWithStatusCodeAsync(httpContext, httpResponseMessage);
             return;
         }
-        return;
+        await _next(httpContext);
     }
 
     private async Task<bool> CheckTokensExpirationsAsync(HttpContext httpContext, HttpResponseMessage httpResponseMessage)
@@ -78,7 +71,7 @@ public class TokenAuthenticationMiddleware
         return false;
     }
 
-    private TokenDto ExtractTokenFromHeaders(HttpContext httpContext)
+    private static TokenDto ExtractTokenFromHeaders(HttpContext httpContext)
     {
         var accessToken = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var refreshToken = httpContext.Request.Headers["Refresh-Token"].ToString();
@@ -87,7 +80,7 @@ public class TokenAuthenticationMiddleware
         return new TokenDto(accessToken, refreshToken);
     }
 
-    private void AssignNewTokenToHeader(HttpContext httpContext, TokenDto tokenDto)
+    private static void AssignNewTokenToHeader(HttpContext httpContext, TokenDto tokenDto)
     {
         httpContext.Response.Headers["Authorization"] = "Bearer " + tokenDto.AccessToken;
         httpContext.Response.Headers["Refresh-Token"] = tokenDto.RefreshToken;
@@ -97,22 +90,18 @@ public class TokenAuthenticationMiddleware
     {
         var json = JsonConvert.SerializeObject(oldToken);
         HttpContent content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-        var httpResponseMessage = await _httpClient.PostAsync($"http://localhost:5038/api/token/{endpointName}", content);
-
-        if (httpResponseMessage == null) throw ServerError.ServerNotResponding;
+        var httpResponseMessage = await _httpClient.PostAsync($"http://localhost:5038/api/token/{endpointName}", content) ?? throw ServerError.ServerNotResponding;
         return httpResponseMessage;
     }
 
-    private async Task<TokenDto> GetNewTokenFromResponseAsync(HttpResponseMessage httpResponseMessage)
+    private static async Task<TokenDto> GetNewTokenFromResponseAsync(HttpResponseMessage httpResponseMessage)
     {
-        string responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
-        var newToken = JsonConvert.DeserializeObject<TokenDto>(responseBody);
-
-        if (newToken == null) throw TokenError.FailedToGenerateToken;
+        var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+        var newToken = JsonConvert.DeserializeObject<TokenDto>(responseBody) ?? throw TokenError.FailedToGenerateToken;
         return newToken;
     }
 
-    private async Task ResponseErrorWithStatusCodeAsync(HttpContext httpContext, HttpResponseMessage httpResponseMessage)
+    private static async Task ResponseErrorWithStatusCodeAsync(HttpContext httpContext, HttpResponseMessage httpResponseMessage)
     {
         var content = await httpResponseMessage.Content.ReadAsStringAsync();
         var jsonObject = JsonConvert.DeserializeObject(content);
