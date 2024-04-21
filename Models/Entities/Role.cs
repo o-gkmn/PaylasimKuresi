@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Models.Entities
+namespace Models.Entities;
+
+public class Role : IdentityRole<Guid>
 {
-    public class Role : IdentityRole<Guid>
-    {
-    }
 }
