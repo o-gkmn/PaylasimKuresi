@@ -365,3 +365,4 @@ FodyWeavers.xsd
 .mono
 .vscode
 .editorconfig
+update-unapplied-migration.sh

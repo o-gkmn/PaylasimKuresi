@@ -4,5 +4,157 @@ using Models.Entities;
 
 namespace DataAccess.DbContext
 {
-    public class EFContext(DbContextOptions options) : IdentityDbContext<User, Role, Guid>(options);
+    public class EFContext(DbContextOptions options) : IdentityDbContext<User, Role, Guid>(options)
+    {
+        DbSet<Comment> Comments { get; set; }
+        DbSet<CommentLike> CommentLikes { get; set; }
+        DbSet<Community> Communities { get; set; }
+        DbSet<CommunityUser> CommunityUsers { get; set; }
+        DbSet<Dm> Dms { get; set; }
+        DbSet<Follow> Follows { get; set; }
+        DbSet<Group> Groups { get; set; }
+        DbSet<GroupUser> GroupUsers { get; set; }
+        DbSet<ImagePost> ImagePosts { get; set; }
+        DbSet<Post> Posts { get; set; }
+        DbSet<PostLike> PostLikes { get; set; }
+        DbSet<TextPost> TextPosts { get; set; }
+        DbSet<VideoPost> VideoPosts { get; set; }
+        DbSet<VoicePost> VoicePosts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ImagePost>()
+                .HasOne(ip => ip.Post)
+                .WithOne(p => p.ImagePost)
+                .HasForeignKey<ImagePost>(ip => ip.PostID);
+
+            modelBuilder.Entity<TextPost>()
+                .HasOne(ip => ip.Post)
+                .WithOne(p => p.TextPost)
+                .HasForeignKey<TextPost>(ip => ip.PostID);
+
+            modelBuilder.Entity<VideoPost>()
+                .HasOne(ip => ip.Post)
+                .WithOne(p => p.VideoPost)
+                .HasForeignKey<VideoPost>(ip => ip.PostID);
+
+            modelBuilder.Entity<VoicePost>()
+                .HasOne(ip => ip.Post)
+                .WithOne(p => p.VoicePost)
+                .HasForeignKey<VoicePost>(ip => ip.PostID);
+
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasOne(p => p.ImagePost);
+                entity.HasOne(p => p.VideoPost);
+                entity.HasOne(p => p.TextPost);
+                entity.HasOne(p => p.VoicePost);
+                entity.HasMany(p => p.Comments);
+                entity.HasMany(p => p.UsersWhoLike);
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasMany(p => p.Comments);
+                entity.HasMany(p => p.CommentLikes);
+                entity.HasMany(p => p.MemberCommunities);
+                entity.HasMany(p => p.FounderOfCommunity);
+                entity.HasMany(p => p.Senders);
+                entity.HasMany(p => p.Receivers);
+                entity.HasMany(p => p.Followers);
+                entity.HasMany(p => p.Following);
+                entity.HasMany(p => p.FounderOfGroups);
+                entity.HasMany(p => p.MemberGroups);
+                entity.HasMany(p => p.LikedPosts);
+            });
+
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.HasMany(p => p.CommentLikes);
+                entity.HasOne(p => p.Post)
+                    .WithMany(oi => oi.Comments)
+                    .HasForeignKey(ip => ip.PostID);
+                entity.HasOne(p => p.User)
+                    .WithMany(oi => oi.Comments)
+                    .HasForeignKey(ip => ip.UserID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<CommentLike>(entity =>
+            {
+                entity.HasOne(p => p.Comment)
+                    .WithMany(oi => oi.CommentLikes)
+                    .HasForeignKey(ip => ip.CommentID);
+                entity.HasOne(p => p.User)
+                    .WithMany(oi => oi.CommentLikes)
+                    .HasForeignKey(ip => ip.UserID);
+            });
+
+            modelBuilder.Entity<CommunityUser>(entity =>
+            {
+                entity.HasOne(p => p.Member)
+                    .WithMany(oi => oi.MemberCommunities)
+                    .HasForeignKey(ip => ip.UserID);
+                entity.HasOne(p => p.Community)
+                    .WithMany(oi => oi.CommunityUsers)
+                    .HasForeignKey(ip => ip.CommunityID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Dm>(entity =>
+            {
+                entity.HasOne(p => p.Sender)
+                    .WithMany(oi => oi.Senders)
+                    .HasForeignKey(ip => ip.SenderID)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(p => p.Receiver)
+                    .WithMany(oi => oi.Receivers)
+                    .HasForeignKey(ip => ip.ReceiverID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Follow>(entity =>
+            {
+                entity.HasOne(p => p.FollowingPerson)
+                    .WithMany(oi => oi.Following)
+                    .HasForeignKey(ip => ip.FollowingPersonID)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(p => p.FollowedPerson)
+                    .WithMany(oi => oi.Followers)
+                    .HasForeignKey(ip => ip.FollowedPersonID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.HasOne(p => p.Founder)
+                    .WithMany(oi => oi.FounderOfGroups)
+                    .HasForeignKey(ip => ip.FounderID);
+                entity.HasMany(p => p.Members);
+            });
+
+            modelBuilder.Entity<GroupUser>(entity =>
+            {
+                entity.HasOne(p => p.Member)
+                    .WithMany(oi => oi.MemberGroups)
+                    .HasForeignKey(ip => ip.UserID);
+                entity.HasOne(p => p.Group)
+                    .WithMany(oi => oi.Members)
+                    .HasForeignKey(ip => ip.GroupID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<PostLike>(entity =>
+            {
+                entity.HasOne(p => p.User)
+                    .WithMany(oi => oi.LikedPosts)
+                    .HasForeignKey(ip => ip.UserID);
+                entity.HasOne(p => p.Post)
+                    .WithMany(oi => oi.UsersWhoLike)
+                    .HasForeignKey(ip => ip.PostID);
+            });
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
 }
