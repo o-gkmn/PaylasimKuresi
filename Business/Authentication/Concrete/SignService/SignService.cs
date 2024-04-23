@@ -1,7 +1,7 @@
 using AutoMapper;
 using Business.Authentication.Interfaces.SignServiceInterfaces;
 using Business.Authentication.Interfaces.TokenManagerInterfaces;
-using DataAccess.Interfaces.SignRepositoryInterfaces;
+using DataAccess.Interfaces.SignRepositories;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.TokenDTOs;
 using Models.DTOs.UserDTOs;

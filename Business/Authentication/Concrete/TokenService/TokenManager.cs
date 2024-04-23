@@ -1,5 +1,5 @@
 ﻿using Business.Authentication.Interfaces.TokenManagerInterfaces;
-using DataAccess.Interfaces.UserRepositoryInterfaces;
+using DataAccess.Interfaces.UserRepositories;
 using Models.DTOs.TokenDTOs;
 using Models.Entities;
 using Models.Errors;
