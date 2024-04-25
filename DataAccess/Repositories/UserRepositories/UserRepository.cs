@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
+using DataAccess.DbContext;
 using DataAccess.Interfaces.UserRepositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 using Models.Errors;
 
@@ -9,10 +11,12 @@ namespace DataAccess.Repositories.UserRepositories;
 public class UserRepository : IUserRepository
 {
     private readonly UserManager<User> _userManager;
+    private readonly EFContext _context;
 
-    public UserRepository(UserManager<User> userManager)
+    public UserRepository(UserManager<User> userManager, EFContext context)
     {
         _userManager = userManager;
+        _context = context;
     }
 
     public async Task<User> FindUserByUserNameAsync(string userName)
@@ -53,14 +57,18 @@ public class UserRepository : IUserRepository
         return user.Id.ToString();
     }
 
-    public Task<User?> GetAsync(Expression<Func<User, bool>> filter)
+    public async Task<User?> GetAsync(Expression<Func<User, bool>> filter)
     {
-        throw new NotImplementedException();
+        var entity = await _context.Users.FirstOrDefaultAsync(filter);
+        return entity ?? null;
     }
 
-    public Task<List<User>> GetListAsync(Expression<Func<User, bool>>? filter = null)
+    public async Task<List<User>> GetListAsync(Expression<Func<User, bool>>? filter = null)
     {
-        throw new NotImplementedException();
+        if (filter == null)
+            return await _context.Users.ToListAsync();
+        else
+            return await _context.Users.Where(filter).ToListAsync();
     }
 
     public Task<User> CreateAsync(User entity)
@@ -68,13 +76,15 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> UpdateAsync(User entity)
+    public async Task<IdentityResult> UpdateAsync(User entity)
     {
-        throw new NotImplementedException();
+        var result = await _userManager.UpdateAsync(entity);
+        return result;
     }
 
-    public Task<bool> DeleteAsync(User entity)
+    public async Task<bool> DeleteAsync(User entity)
     {
-        throw new NotImplementedException();
+        var result = await _userManager.DeleteAsync(entity);
+        return result.Succeeded;
     }
 }
