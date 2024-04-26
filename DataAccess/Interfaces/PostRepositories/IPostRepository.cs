@@ -3,6 +3,6 @@ using Models.Entities;
 
 namespace DataAccess.Interfaces.PostRepositories;
 
-public interface IPostRepository : ICommonOperations<PostLike>
+public interface IPostRepository : ICommonOperations<Post>
 {
 }
