@@ -1,0 +1,28 @@
+<ul class="list-unstyled" style="margin-bottom: 0;">
+    <li class="media post-form w-shadow">
+        <div class="media-body">
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                <div class="form-group post-input">
+                    <textarea class="form-control" id="postForm" rows="2" placeholder="Ne düşünüyorsun..."></textarea>
+                </div>
+                <div class="row post-form-group">
+                    <div class="col-md-9">
+                        <button type="button" class="btn btn-link post-form-btn btn-sm">
+                            <i class='bx bx-images'></i> <span>Fotoğraf/Video</span>
+                        </button>
+                        <button type="button" class="btn btn-link post-form-btn btn-sm">
+                            <i class='bx bxs-group'></i> <span>Arkadaşını Etiketle</span>
+                        </button>
+                        <button type="button" class="btn btn-link post-form-btn btn-sm">
+                            <i class='bx bxs-map'></i> <span>Konum Ekle</span>
+                        </button>
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <button type="submit" class="btn btn-primary btn">Yayınla</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </li>
+</ul>
