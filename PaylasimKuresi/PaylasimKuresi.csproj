@@ -4,7 +4,6 @@
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Business\Business.csproj" />
   </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
