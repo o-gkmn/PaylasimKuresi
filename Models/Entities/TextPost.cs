@@ -6,9 +6,4 @@ public class TextPost
 {
     public Guid ID { get; set; }
     public required string Content { get; set; }
-
-    public Guid PostID { get; set; }
-
-    [ForeignKey("PostID")]
-    public required Post Post { get; set; }
 }

@@ -8,9 +8,4 @@ public class VoicePost
     public required string Url { get; set; }
     public required string Duration { get; set; }
     public required string Format { get; set; }
-
-    public Guid PostID { get; set; }
-
-    [ForeignKey("PostID")]
-    public required Post Post { get; set; }
 }
