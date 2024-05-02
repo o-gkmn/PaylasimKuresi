@@ -1,15 +1,16 @@
 using System.Linq.Expressions;
 using Business.PaylasimKuresi.Interfaces.CommunityServices;
 using Business.PaylasimKuresi.Interfaces.CommunityUserServices;
+using DataAccess.Interfaces.CommunityRepositories;
 using Models.Entities;
 
 namespace Business.PaylasimKuresi.Services.CommunityServices;
 
 public class CommunityService : ICommunityService
 {
-    private readonly ICommunityService _communityRepository;
+    private readonly ICommunityRepository _communityRepository;
 
-    public CommunityService(ICommunityService communityRepository)
+    public CommunityService(ICommunityRepository communityRepository)
     {
         _communityRepository = communityRepository;
     }

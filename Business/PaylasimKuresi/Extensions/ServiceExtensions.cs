@@ -76,6 +76,8 @@ using Models.Entities;
 using Shared.Mapper;
 using System.Text;
 
+namespace Business.PaylasimKuresi.Extensions;
+
 public static class ServiceExtensions
 {
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

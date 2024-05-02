@@ -1,14 +1,15 @@
 using System.Linq.Expressions;
 using Business.PaylasimKuresi.Interfaces.CommentServices;
+using DataAccess.Interfaces.CommentRepositories;
 using Models.Entities;
 
 namespace Business.PaylasimKuresi.Services.CommentServices;
 
 public class CommentService : ICommentService
 {
-    private readonly ICommentService _commentRepository;
+    private readonly ICommentRepository _commentRepository;
 
-    public CommentService(ICommentService commentRepository)
+    public CommentService(ICommentRepository commentRepository)
     {
         _commentRepository = commentRepository;
     }
