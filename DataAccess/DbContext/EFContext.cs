@@ -6,20 +6,20 @@ namespace DataAccess.DbContext
 {
     public class EFContext(DbContextOptions options) : IdentityDbContext<User, Role, Guid>(options)
     {
-        DbSet<Comment> Comments { get; set; }
-        DbSet<CommentLike> CommentLikes { get; set; }
-        DbSet<Community> Communities { get; set; }
-        DbSet<CommunityUser> CommunityUsers { get; set; }
-        DbSet<Dm> Dms { get; set; }
-        DbSet<Follow> Follows { get; set; }
-        DbSet<Group> Groups { get; set; }
-        DbSet<GroupUser> GroupUsers { get; set; }
-        DbSet<ImagePost> ImagePosts { get; set; }
-        DbSet<Post> Posts { get; set; }
-        DbSet<PostLike> PostLikes { get; set; }
-        DbSet<TextPost> TextPosts { get; set; }
-        DbSet<VideoPost> VideoPosts { get; set; }
-        DbSet<VoicePost> VoicePosts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<CommentLike> CommentLikes { get; set; }
+        public DbSet<Community> Communities { get; set; }
+        public DbSet<CommunityUser> CommunityUsers { get; set; }
+        public DbSet<Dm> Dms { get; set; }
+        public DbSet<Follow> Follows { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupUser> GroupUsers { get; set; }
+        public DbSet<ImagePost> ImagePosts { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostLike> PostLikes { get; set; }
+        public DbSet<TextPost> TextPosts { get; set; }
+        public DbSet<VideoPost> VideoPosts { get; set; }
+        public DbSet<VoicePost> VoicePosts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
