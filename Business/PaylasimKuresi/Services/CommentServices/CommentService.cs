@@ -1,6 +1,9 @@
 using System.Linq.Expressions;
+using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
 using Business.PaylasimKuresi.Interfaces.CommentServices;
 using DataAccess.Interfaces.CommentRepositories;
+using Models.DTOs.CommentDTOs;
 using Models.Entities;
 
 namespace Business.PaylasimKuresi.Services.CommentServices;
@@ -8,39 +11,55 @@ namespace Business.PaylasimKuresi.Services.CommentServices;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
+    private readonly IMapper _mapper;
 
-    public CommentService(ICommentRepository commentRepository)
+    public CommentService(ICommentRepository commentRepository, IMapper mapper)
     {
         _commentRepository = commentRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Comment> CreateAsync(Comment entity)
+    public async Task<GetCommentDto> CreateAsync(CreateCommentDto entityDto)
     {
+        var entity = _mapper.Map<Comment>(entityDto);
         var result = await _commentRepository.CreateAsync(entity);
-        return result;
+
+        var createdEntityDto = _mapper.Map<GetCommentDto>(result);
+        return createdEntityDto;
     }
 
-    public async Task<bool> DeleteAsync(Comment entity)
+    public async Task<bool> DeleteAsync(GetCommentDto entityDto)
     {
+        var entity = _mapper.Map<Comment>(entityDto);
         var result = await _commentRepository.DeleteAsync(entity);
+
         return result;
     }
 
-    public async Task<Comment?> GetAsync(Expression<Func<Comment, bool>> filter)
+    public async Task<GetCommentDto?> GetAsync(Expression<Func<GetCommentDto, bool>> filter)
     {
-        var result = await _commentRepository.GetAsync(filter);
-        return result;
+        var commentFilter = _mapper.MapExpression<Expression<Func<Comment, bool>>>(filter);
+        var result = await _commentRepository.GetAsync(commentFilter);
+
+        var getEntityDto = _mapper.Map<GetCommentDto>(result);
+        return getEntityDto;
     }
 
-    public async Task<List<Comment>> GetListAsync(Expression<Func<Comment, bool>>? filter = null)
+    public async Task<List<GetCommentDto>> GetListAsync(Expression<Func<GetCommentDto, bool>>? filter = null)
     {
-        var result = await _commentRepository.GetListAsync(filter);
-        return result;
+        var commentFilter = _mapper.MapExpression<Expression<Func<Comment, bool>>>(filter);
+        var result = await _commentRepository.GetListAsync(commentFilter);
+
+        var getEntityDtoList = _mapper.Map<List<GetCommentDto>>(result);
+        return getEntityDtoList;
     }
 
-    public async Task<Comment> UpdateAsync(Comment entity)
+    public async Task<GetCommentDto> UpdateAsync(UpdateCommentDto entityDto)
     {
+        var entity = _mapper.Map<Comment>(entityDto);
         var result = await _commentRepository.UpdateAsync(entity);
-        return result;
+
+        var updatedEntityDto = _mapper.Map<GetCommentDto>(result);
+        return updatedEntityDto;
     }
 }

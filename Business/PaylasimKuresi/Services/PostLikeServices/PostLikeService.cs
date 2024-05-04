@@ -1,6 +1,9 @@
 using System.Linq.Expressions;
+using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
 using Business.PaylasimKuresi.Interfaces.PostLikeServices;
 using DataAccess.Interfaces.PostLikeRepositories;
+using Models.DTOs.PostLikeDTOs;
 using Models.Entities;
 
 namespace Business.PaylasimKuresi.Services.PostLikeServices;
@@ -8,39 +11,55 @@ namespace Business.PaylasimKuresi.Services.PostLikeServices;
 public class PostLikeService : IPostLikeService
 {
     private readonly IPostLikeRepository _postLikeRepository;
+    private readonly IMapper _mapper;
 
-    public PostLikeService(IPostLikeRepository postLikeRepository)
+    public PostLikeService(IPostLikeRepository postLikeRepository, IMapper mapper)
     {
         _postLikeRepository = postLikeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<PostLike> CreateAsync(PostLike entity)
+    public async Task<GetPostLikeDto> CreateAsync(CreatePostLikeDto entityDto)
     {
+        var entity = _mapper.Map<PostLike>(entityDto);
         var result = await _postLikeRepository.CreateAsync(entity);
-        return result;
+
+        var createdEntityDto = _mapper.Map<GetPostLikeDto>(result);
+        return createdEntityDto;
     }
 
-    public async Task<bool> DeleteAsync(PostLike entity)
+    public async Task<bool> DeleteAsync(GetPostLikeDto entityDto)
     {
+        var entity = _mapper.Map<PostLike>(entityDto);
         var result = await _postLikeRepository.DeleteAsync(entity);
+
         return result;
     }
 
-    public async Task<PostLike?> GetAsync(Expression<Func<PostLike, bool>> filter)
+    public async Task<GetPostLikeDto?> GetAsync(Expression<Func<GetPostLikeDto, bool>> filter)
     {
-        var result = await _postLikeRepository.GetAsync(filter);
-        return result;
+        var postLikeFilter = _mapper.MapExpression<Expression<Func<PostLike, bool>>>(filter);
+        var result = await _postLikeRepository.GetAsync(postLikeFilter);
+
+        var getEntityDto = _mapper.Map<GetPostLikeDto>(result);
+        return getEntityDto;
     }
 
-    public async Task<List<PostLike>> GetListAsync(Expression<Func<PostLike, bool>>? filter = null)
+    public async Task<List<GetPostLikeDto>> GetListAsync(Expression<Func<GetPostLikeDto, bool>>? filter = null)
     {
-        var result = await _postLikeRepository.GetListAsync(filter);
-        return result;
+        var postLikeFilter = _mapper.MapExpression<Expression<Func<PostLike, bool>>>(filter);
+        var result = await _postLikeRepository.GetListAsync(postLikeFilter);
+
+        var getEntityDtoList = _mapper.Map<List<GetPostLikeDto>>(result);
+        return getEntityDtoList;
     }
 
-    public async Task<PostLike> UpdateAsync(PostLike entity)
+    public async Task<GetPostLikeDto> UpdateAsync(UpdatePostLikeDto entityDto)
     {
+        var entity = _mapper.Map<PostLike>(entityDto);
         var result = await _postLikeRepository.UpdateAsync(entity);
-        return result;
+
+        var updatedEntityDto = _mapper.Map<GetPostLikeDto>(result);
+        return updatedEntityDto;
     }
 }
