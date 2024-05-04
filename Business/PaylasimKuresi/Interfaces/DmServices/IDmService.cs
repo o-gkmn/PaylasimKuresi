@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.DmDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.DmServices;
 
-public interface IDmService : ICommonOperation<Dm>
+public interface IDmService : ICommonOperation<CreateDmDto, UpdateDmDto, GetDmDto>
 {
 
 }

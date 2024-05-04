@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.ImagePostDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.ImagePostServices;
 
-public interface IImagePostService : ICommonOperation<ImagePost>
+public interface IImagePostService : ICommonOperation<CreateImagePostDto, UpdateImagePostDto, GetImagePostDto>
 {
 
 }

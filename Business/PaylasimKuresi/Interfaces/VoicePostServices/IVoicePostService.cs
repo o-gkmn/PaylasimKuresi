@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.VoicePostDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.VoicePostServices;
 
-public interface IVoicePostService : ICommonOperation<VoicePost>
+public interface IVoicePostService : ICommonOperation<CreateVoicePostDto, UpdateVoicePostDto, GetVoicePostDto>
 {
 
 }

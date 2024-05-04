@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.PostLikeDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.PostLikeServices;
 
-public interface IPostLikeService : ICommonOperation<PostLike>
+public interface IPostLikeService : ICommonOperation<CreatePostLikeDto, UpdatePostLikeDto, GetPostLikeDto>
 {
 
 }

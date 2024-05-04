@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.PostDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.PostServices;
 
-public interface IPostService : ICommonOperation<Post>
+public interface IPostService : ICommonOperation<CreatePostDto, UpdatePostDto, GetPostDto>
 {
 
 }

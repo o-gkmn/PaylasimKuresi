@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.FollowDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.FollowServices;
 
-public interface IFollowService : ICommonOperation<Follow>
+public interface IFollowService : ICommonOperation<CreateFollowDto, UpdateFollowDto, GetFollowDto>
 {
 
 }

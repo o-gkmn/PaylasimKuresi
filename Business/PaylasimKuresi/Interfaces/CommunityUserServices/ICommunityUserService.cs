@@ -1,9 +1,9 @@
 using Business.PaylasimKuresi.Interfaces.CommonOperations;
-using Models.Entities;
+using Models.DTOs.CommunityUserDTOs;
 
 namespace Business.PaylasimKuresi.Interfaces.CommunityUserServices;
 
-public interface ICommunityUserService : ICommonOperation<CommunityUser>
+public interface ICommunityUserService : ICommonOperation<CreateCommunityUserDto, UpdateCommunityUserDto, GetCommunityUserDto>
 {
 
 }

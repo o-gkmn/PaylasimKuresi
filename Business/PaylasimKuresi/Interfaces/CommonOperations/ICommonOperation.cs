@@ -2,11 +2,11 @@ using System.Linq.Expressions;
 
 namespace Business.PaylasimKuresi.Interfaces.CommonOperations;
 
-public interface ICommonOperation<T> where T : class
+public interface ICommonOperation<TCreate, TUpdate, TGet>
 {
-    Task<T?> GetAsync(Expression<Func<T, bool>> filter);
-    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null);
-    Task<T> CreateAsync(T entity);
-    Task<T> UpdateAsync(T entity);
-    Task<bool> DeleteAsync(T entity);
+    Task<TGet?> GetAsync(Expression<Func<TGet, bool>> filter);
+    Task<List<TGet>> GetListAsync(Expression<Func<TGet, bool>>? filter = null);
+    Task<TCreate> CreateAsync(TCreate entity);
+    Task<TUpdate> UpdateAsync(TUpdate entity);
+    Task<bool> DeleteAsync(TGet entity);
 }
