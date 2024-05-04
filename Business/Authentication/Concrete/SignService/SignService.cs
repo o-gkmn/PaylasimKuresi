@@ -41,7 +41,7 @@ namespace Business.Authentication.Concrete.SignService
             throw new NotImplementedException();
         }
 
-        public async Task<TokenDto> SignUpAsync(SignUpUserDto signUpUserDto)
+        public async Task<TokenDto> SignUpAsync(CreateUserDto signUpUserDto)
         {
             var userEntity = _mapper.Map<User>(signUpUserDto);
 

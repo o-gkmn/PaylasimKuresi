@@ -7,6 +7,6 @@ namespace Business.Authentication.Interfaces.SignServiceInterfaces
     {
         public Task<TokenDto> SignInAsync(SignInUserDto user);
         public Task SignOutAsync(SignInUserDto user);
-        public Task<TokenDto> SignUpAsync(SignUpUserDto signUpUserDto);
+        public Task<TokenDto> SignUpAsync(CreateUserDto signUpUserDto);
     }
 }
