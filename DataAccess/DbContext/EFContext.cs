@@ -23,32 +23,20 @@ namespace DataAccess.DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ImagePost>()
-                .HasOne(ip => ip.Post)
-                .WithOne(p => p.ImagePost)
-                .HasForeignKey<ImagePost>(ip => ip.PostID);
-
-            modelBuilder.Entity<TextPost>()
-                .HasOne(ip => ip.Post)
-                .WithOne(p => p.TextPost)
-                .HasForeignKey<TextPost>(ip => ip.PostID);
-
-            modelBuilder.Entity<VideoPost>()
-                .HasOne(ip => ip.Post)
-                .WithOne(p => p.VideoPost)
-                .HasForeignKey<VideoPost>(ip => ip.PostID);
-
-            modelBuilder.Entity<VoicePost>()
-                .HasOne(ip => ip.Post)
-                .WithOne(p => p.VoicePost)
-                .HasForeignKey<VoicePost>(ip => ip.PostID);
-
             modelBuilder.Entity<Post>(entity =>
             {
-                entity.HasOne(p => p.ImagePost);
-                entity.HasOne(p => p.VideoPost);
-                entity.HasOne(p => p.TextPost);
-                entity.HasOne(p => p.VoicePost);
+                entity.HasOne(p => p.ImagePost)
+                    .WithOne()
+                    .HasForeignKey<Post>(oi => oi.ImagePostID);
+                entity.HasOne(p => p.VideoPost)
+                    .WithOne()
+                    .HasForeignKey<Post>(p => p.VideoPostID);
+                entity.HasOne(p => p.TextPost)
+                    .WithOne()
+                    .HasForeignKey<Post>(p => p.TextPostID);
+                entity.HasOne(p => p.VoicePost)
+                    .WithOne()
+                    .HasForeignKey<Post>(oi => oi.VoicePostID);
                 entity.HasMany(p => p.Comments);
                 entity.HasMany(p => p.UsersWhoLike);
             });
