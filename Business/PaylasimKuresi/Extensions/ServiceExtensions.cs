@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
 using Business.Authentication.Concrete.SignService;
 using Business.Authentication.Concrete.TokenService;
 using Business.Authentication.Interfaces.SignServiceInterfaces;
@@ -150,6 +151,7 @@ public static class ServiceExtensions
     {
         var config = new MapperConfiguration(cfg =>
         {
+            cfg.AddExpressionMapping();
             cfg.AddProfile<MapperProfile>();
         });
 
