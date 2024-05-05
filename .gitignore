@@ -366,3 +366,4 @@ FodyWeavers.xsd
 .vscode
 .editorconfig
 update-unapplied-migration.sh
+PaylasimKuresi/appsettings.json
