@@ -6,7 +6,6 @@ namespace Models.Errors
     {
         public static readonly Error ModelNull = new Error(StatusCodes.Status400BadRequest, "ModelError.ModelNull", "The given model was null!");
         public static readonly Error EmptyPassword = new Error(StatusCodes.Status400BadRequest, "ModelError.EmptyPassword", "Password cannot be empty!");
-        public static readonly Error EmptyUserName = new Error(StatusCodes.Status400BadRequest, "ModelError.EmptyUserName", "Username cannot be empty!");
-
+        public static readonly Error EmptyEmail = new Error(StatusCodes.Status400BadRequest, "ModelError.EmptyEmail", "Email boş olamaz");
     }
 }

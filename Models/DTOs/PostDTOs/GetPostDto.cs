@@ -21,6 +21,9 @@ public class GetPostDto
     public required string Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
+    public required User User { get; set; }
+    public required Community Community { get; set; }
+
     public ICollection<Comment>? Comments { get; set; }
     public required ICollection<PostLike> UsersWhoLike { get; set; }
 }
