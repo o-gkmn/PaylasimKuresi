@@ -31,7 +31,7 @@ namespace Business.Authentication.Concrete.SignService
             if (user.Password.IsNullOrEmpty()) throw ModelError.EmptyPassword;
 
             var result = await _signRepository.SignInUserAsync(userEntity, user.Password);
-            var token = _tokenManager.GenerateRefreshToken(userEntity);
+            var token = _tokenManager.GenerateRefreshToken(result);
 
             return token;
         }
