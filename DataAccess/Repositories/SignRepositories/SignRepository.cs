@@ -26,8 +26,8 @@ public class SignRepository(UserManager<User> userManager) : ISignRepository
 
     public async Task<User> SignInUserAsync(User userEntity, string password)
     {
-        if (userEntity.UserName == null) throw ModelError.EmptyUserName;
-        var user = await userManager.FindByNameAsync(userEntity.UserName);
+        if (userEntity.Email == null) throw ModelError.EmptyEmail;
+        var user = await userManager.FindByEmailAsync(userEntity.Email);
 
         if (user == null) throw UserError.UserNotFound;
         var isPasswordCorrect = await userManager.CheckPasswordAsync(user, password);
