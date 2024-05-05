@@ -1,8 +1,11 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
+using Business.PaylasimKuresi.Interfaces.PostServices;
 using Business.PaylasimKuresi.Interfaces.TextPostServices;
+using DataAccess.Interfaces.PostRepositories;
 using DataAccess.Interfaces.TextPostRepositories;
+using Models.DTOs.PostDTOs;
 using Models.DTOs.TextPostDTOs;
 using Models.Entities;
 
@@ -11,18 +14,30 @@ namespace Business.PaylasimKuresi.Services.TextPostServices;
 public class TextPostService : ITextPostService
 {
     private readonly ITextPostRepository _textPostRepository;
+    private readonly IPostService _postService;
     private readonly IMapper _mapper;
 
-    public TextPostService(ITextPostRepository textPostRepository, IMapper mapper)
+    public TextPostService(ITextPostRepository textPostRepository, IMapper mapper, IPostService postService)
     {
         _textPostRepository = textPostRepository;
         _mapper = mapper;
+        _postService = postService;
     }
 
     public async Task<GetTextPostDto> CreateAsync(CreateTextPostDto entityDto)
     {
         var entity = _mapper.Map<TextPost>(entityDto);
         var result = await _textPostRepository.CreateAsync(entity);
+
+        var newPost = new CreatePostDto
+        {
+            Status = entityDto.Status,
+            CommunityID = entityDto.CommunityId,
+            UserID = entityDto.UserID,
+            CreatedAt = DateTime.UtcNow,
+            TextPostID = result.ID,
+        };
+        await _postService.CreateAsync(newPost);
 
         var createdEntityDto = _mapper.Map<GetTextPostDto>(result);
         return createdEntityDto;
