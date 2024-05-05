@@ -1,0 +1,17 @@
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+
+@await Html.PartialAsync("/Views/SignLayoutPartial/_HeadPartial.cshtml")
+
+<body>
+
+    @RenderBody();
+
+    @await Html.PartialAsync("/Views/SignLayoutPartial/_ScriptPartial.cshtml")
+</body>
+
+</html>

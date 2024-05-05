@@ -1,0 +1,117 @@
+@model CreateUserDto;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_SignLayout.cshtml";
+}
+
+<div class="row ht-100v flex-row-reverse no-gutters">
+    <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div class="signup-form">
+            <div class="auth-logo text-center">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="/template/assets/images/logo-64x64.png" class="logo-img" alt="Logo">
+                    </div>
+                    <div class="col-md-10">
+                        <p>Paylaşım Küresi</p>
+                    </div>
+                </div>
+            </div>
+            <form asp-action="Index" asp-controller="SignUp" method="post" class="pt-5">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="FirstName" placeholder="Ad">
+                            <span asp-validation-for="FirstName" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="LastName" placeholder="Soyad">
+                            <span asp-validation-for="LastName" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select name="Gender" id="" class="form-control">
+                                <option value="">Cinsiyet</option>
+                                <option value="Woman">Kadın</option>
+                                <option value="Man">Erkek</option>
+                                <option value="DoNotWantToSpecify">Belirtmek İstemiyorum</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="UserName" placeholder="Kullanıcı Adı">
+                            <span asp-validation-for="UserName" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="Email" placeholder="Eposta Adresi">
+                            <span asp-validation-for="Email" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="PhoneNumber" placeholder="Telefon Numarası">
+                            <span asp-validation-for="PhoneNumber" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="DateOfBirth" onfocus="(this.type='date')"
+                                placeholder="Doğum Tarihi" max="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            <span asp-validation-for="DateOfBirth" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="Password" placeholder="Şifre">
+                            <span asp-validation-for="Password" class="text-danger" style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="ConfirmPassword"
+                                placeholder="Şifre Tekrar">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"
+                                style="font-size: small;"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <p class="agree-privacy">Aşağıdaki Kaydol düğmesine tıklayarak gizlilik politikamızı ve web
+                            sitemizin kullanım koşullarını kabul etmiş olursunuz.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="go-login">Zaten üye misiniz? <a href="/SignIn/">Giriş Yap</a></span>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary sign-up">Kayıt Ol</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6 auth-bg-image d-flex justify-content-center align-items-center">
+        <div class="auth-left-content mt-5 mb-5 text-center">
+            <div class="weather-small text-white">
+                <p class="current-weather"><i class='bx bx-sun'></i> <span>14&deg;</span></p>
+                <p class="weather-city">Gyumri</p>
+            </div>
+            <div class="text-white mt-5 mb-5">
+                <h2 class="create-account mb-3">Create Account</h2>
+                <p>Enter your personal details and start journey with us.</p>
+            </div>
+            <div class="auth-quick-links">
+                <a href="#" class="btn btn-outline-primary">Purchase template</a>
+            </div>
+        </div>
+    </div>
+</div>
