@@ -1,9 +1,7 @@
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using Business.Authentication.Concrete.SignService;
-using Business.Authentication.Concrete.TokenService;
 using Business.Authentication.Interfaces.SignServiceInterfaces;
-using Business.Authentication.Interfaces.TokenManagerInterfaces;
 using Business.PaylasimKuresi.Interfaces.CommentLikeServices;
 using Business.PaylasimKuresi.Interfaces.CommentServices;
 using Business.PaylasimKuresi.Interfaces.CommunityServices;
@@ -46,7 +44,6 @@ using DataAccess.Interfaces.GroupUserRepositories;
 using DataAccess.Interfaces.ImagePostRepositories;
 using DataAccess.Interfaces.PostRepositories;
 using DataAccess.Interfaces.RoleRepositories;
-using DataAccess.Interfaces.SignRepositories;
 using DataAccess.Interfaces.TextPostRepositories;
 using DataAccess.Interfaces.UserRepositories;
 using DataAccess.Interfaces.VideoPostRepositories;
@@ -62,20 +59,17 @@ using DataAccess.Repositories.GroupUserRepositories;
 using DataAccess.Repositories.ImagePostRepositories;
 using DataAccess.Repositories.PostRepositories;
 using DataAccess.Repositories.RoleRepositories;
-using DataAccess.Repositories.SignRepositories;
 using DataAccess.Repositories.TextPostRepositories;
 using DataAccess.Repositories.UserRepositories;
 using DataAccess.Repositories.VideoPostRepositories;
 using DataAccess.Repositories.VoicePostRepositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Models.Entities;
 using Shared.Mapper;
-using System.Text;
 
 namespace Business.PaylasimKuresi.Extensions;
 
@@ -106,13 +100,11 @@ public static class ServiceExtensions
         services.AddScoped<ITextPostService, TextPostService>();
         services.AddScoped<IVideoPostService, VideoPostService>();
         services.AddScoped<IVoicePostService, VoicePostService>();
+        services.AddScoped<ISignService, SignService>();
     }
 
     public static void ConfigureRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ISignRepository, SignRepository>();
-        services.AddScoped<ITokenManager, TokenManager>();
-        services.AddScoped<ITokenManagerFactory, TokenManagerFactory>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
@@ -147,6 +139,25 @@ public static class ServiceExtensions
             .AddDefaultTokenProviders();
     }
 
+    public static void ConfigureApplicationCookie(this IServiceCollection services)
+    {
+        services.ConfigureApplicationCookie(option =>
+            {
+                option.LoginPath = "/SignIn/";
+                option.LogoutPath = "/account/logout";
+                option.AccessDeniedPath = "/account/accessdenied";
+                option.SlidingExpiration = true;
+                option.ExpireTimeSpan = TimeSpan.FromMinutes(36);
+
+                option.Cookie = new CookieBuilder
+                {
+                    HttpOnly = true,
+                    Name = ".Shopapp.Security.Cookie",
+                    SameSite = SameSiteMode.Strict
+                };
+            });
+    }
+
     public static void ConfigureAutoMapper(this IServiceCollection services)
     {
         var config = new MapperConfiguration(cfg =>
@@ -157,28 +168,5 @@ public static class ServiceExtensions
 
         var mapper = config.CreateMapper();
         services.AddSingleton(mapper);
-    }
-
-    public static void ConfigureJwtBearer(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(
-                authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
-                configureOptions: options =>
-                {
-                    options.IncludeErrorDetails = true;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:PrivateKey"])),
-                        ValidAudience = configuration["JWT:Audience"],
-                        ValidIssuer = configuration["JWT:Issuer"],
-                        RequireExpirationTime = true,
-                        RequireAudience = true,
-                        ValidateIssuer = true,
-                        ValidateLifetime = true,
-                        ValidateAudience = true,
-                    };
-                });
     }
 }

@@ -22,10 +22,22 @@ public class SignUpController : Controller
     [HttpPost]
     public async Task<IActionResult> Index(CreateUserDto createUserDto)
     {
+        createUserDto.ProfilePictureUrl = "/assets/ProfilePictures/unknown_pp.jpg";
         if (ModelState.IsValid)
         {
-            var token = await _signService.SignUpAsync(createUserDto);
-            return RedirectToAction("Index");
+            var result = await _signService.SignUpAsync(createUserDto);
+            if (result)
+            {
+                var signInDto = new SignInUserDto()
+                {
+                    Email = createUserDto.Email,
+                    Password = createUserDto.Password
+                };
+                var signInResult = await _signService.SignInAsync(signInDto);
+                if (signInResult)
+                    return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "SignIn");
         }
 
         return View(createUserDto);
