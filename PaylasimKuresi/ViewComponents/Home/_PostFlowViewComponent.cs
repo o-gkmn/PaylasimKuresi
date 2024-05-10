@@ -1,5 +1,4 @@
 using Business.PaylasimKuresi.Interfaces.PostServices;
-using DataAccess.Interfaces.PostRepositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PaylasimKuresi.ViewComponents.Home;
@@ -16,6 +15,7 @@ public class _PostFlowViewComponent : ViewComponent
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var postDtoList = await _postService.GetListAsync();
+        postDtoList = [.. postDtoList.OrderByDescending(x => x.CreatedAt)];
         return View(postDtoList);
     }
 }

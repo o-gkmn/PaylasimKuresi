@@ -8,7 +8,7 @@
 @await Html.PartialAsync("/Views/LayoutPartial/_HeadPartial.cshtml")
 
 <body>
-    @await Html.PartialAsync("/Views/LayoutPartial/_NavbarPartial.cshtml")
+    @await Component.InvokeAsync("_Navbar")
 
     <div class="row newsfeed-right-side-content mt-3">
         @await Html.PartialAsync("/Views/LayoutPartial/_SidebarPartial.cshtml")

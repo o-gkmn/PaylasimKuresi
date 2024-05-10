@@ -1,8 +1,6 @@
 using Business.Authentication.Interfaces.SignServiceInterfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.UserDTOs;
-using Models.Errors;
 
 namespace PaylasimKuresi.Controllers;
 
@@ -10,10 +8,12 @@ namespace PaylasimKuresi.Controllers;
 public class SignInController : Controller
 {
     private readonly ISignService _signService;
+    private readonly ISignService _authenticationService;
 
-    public SignInController(ISignService signService)
+    public SignInController(ISignService signService, ISignService authenticationService)
     {
         _signService = signService;
+        _authenticationService = authenticationService;
     }
 
     public IActionResult Index()
@@ -26,24 +26,11 @@ public class SignInController : Controller
     {
         if (ModelState.IsValid)
         {
-            try
-            {
-                var token = await _signService.SignInAsync(signInUserDto);
-                Request.Headers.Append("Authorization", "Bearer " + token.AccessToken);
-                Request.Headers.Append("Refresh-Token", token.RefreshToken);
+            var result = await _authenticationService.SignInAsync(signInUserDto);
+            if (result)
                 return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-                if (ex is Error error)
-                {
-                    if (error.Type == UserError.WrongPassword.Type)
-                    {
-                        ModelState.AddModelError(nameof(SignInUserDto.ErrorMessage), "Üzgünüz, şifreniz yanlıştı. Lütfen şifrenizi iki kez kontrol edin.");
-                    }
-                }
-            }
+            else
+                ModelState.AddModelError(nameof(SignInUserDto.ErrorMessage), "Üzgünüz, şifreniz yanlıştı. Lütfen şifrenizi iki kez kontrol edin.");
         }
         return View(signInUserDto);
     }

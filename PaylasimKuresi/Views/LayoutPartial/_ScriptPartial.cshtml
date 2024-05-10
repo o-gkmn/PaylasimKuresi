@@ -54,3 +54,13 @@
     });
 
 </script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.show-comments', function () {
+            var itemId = $(this).data('item-id');
+            var comments = $('.hide-comments[data-item-id="' + itemId + '"]');
+            comments.slideToggle("slow");
+        });
+    });
+</script>

@@ -37,6 +37,9 @@ namespace DataAccess.DbContext
                 entity.HasOne(p => p.VoicePost)
                     .WithOne()
                     .HasForeignKey<Post>(oi => oi.VoicePostID);
+                entity.HasOne(p => p.User)
+                    .WithMany(oi => oi.Posts)
+                    .HasForeignKey(ip => ip.UserID);
                 entity.HasMany(p => p.Comments);
                 entity.HasMany(p => p.UsersWhoLike);
             });
@@ -54,6 +57,7 @@ namespace DataAccess.DbContext
                 entity.HasMany(p => p.FounderOfGroups);
                 entity.HasMany(p => p.MemberGroups);
                 entity.HasMany(p => p.LikedPosts);
+                entity.HasMany(p => p.Posts);
             });
 
             modelBuilder.Entity<Comment>(entity =>

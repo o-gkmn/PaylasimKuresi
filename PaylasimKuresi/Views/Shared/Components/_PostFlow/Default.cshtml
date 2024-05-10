@@ -5,10 +5,10 @@
     {
         <div class="post border-bottom p-3 bg-white w-shadow rounded mt-3">
             <div class="media text-muted pt-3">
-                <img src="/template/assets/images/users/user-1.jpg" alt="Online user" class="mr-3 post-user-image">
+                <img src=@item.User.ProfilePictureUrl alt="Online user" class="mr-3 post-user-image">
                 <div class="media-body pb-3 mb-0 small lh-125">
                     <div class="d-flex justify-content-between align-items-center w-100">
-                        <a href="#" class="text-gray-dark post-user-name">John Michael</a>
+                        <a href="#" class="text-gray-dark post-user-name">@item.User.FirstName @item.User.LastName</a>
                         <div class="dropdown">
                             <a href="#" class="post-more-settings" role="button" data-toggle="dropdown" id="postOptions"
                                 aria-haspopup="true" aria-expanded="false">
@@ -22,7 +22,8 @@
                                         </div>
                                         <div class="col-md-10">
                                             <span class="fs-9">Gönderiyi kaydet</span>
-                                            <small id="savePost" class="form-text text-muted">Bunu kayıtlı öğelerinize ekleyin</small>
+                                            <small id="savePost" class="form-text text-muted">Bunu kayıtlı öğelerinize
+                                                ekleyin</small>
                                         </div>
                                     </div>
                                 </a>
@@ -33,7 +34,8 @@
                                         </div>
                                         <div class="col-md-10">
                                             <span class="fs-9">Gönderiyi gizle</span>
-                                            <small id="hidePost" class="form-text text-muted">Bunun gibi daha az gönderi görün</small>
+                                            <small id="hidePost" class="form-text text-muted">Bunun gibi daha az gönderi
+                                                görün</small>
                                         </div>
                                     </div>
                                 </a>
@@ -44,7 +46,8 @@
                                         </div>
                                         <div class="col-md-10">
                                             <span class="fs-9">Linayı 30 gün boyunca ertele</span>
-                                            <small id="snoozePost" class="form-text text-muted">Gönderileri görmeyi geçici olarak durdur</small>
+                                            <small id="snoozePost" class="form-text text-muted">Gönderileri görmeyi geçici
+                                                olarak durdur</small>
                                         </div>
                                     </div>
                                 </a>
@@ -55,14 +58,15 @@
                                         </div>
                                         <div class="col-md-10">
                                             <span class="fs-9">Şikayet et</span>
-                                            <small id="reportPost" class="form-text text-muted">Bu gönderi hakkında endişeliyim</small>
+                                            <small id="reportPost" class="form-text text-muted">Bu gönderi hakkında
+                                                endişeliyim</small>
                                         </div>
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <span class="d-block">@item.CreatedAt.ToShortDateString()<i class='bx bx-globe ml-3'></i></span>
+                    <span class="d-block">@item.CreatedAt.ToString("dd/MM/yyyy")<i class='bx bx-globe ml-3'></i></span>
                 </div>
             </div>
             @{
@@ -83,7 +87,8 @@
                 <!-- Reactions -->
                 <div class="argon-reaction">
                     <span class="like-btn">
-                        <a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i> 67</a>
+                        <a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i>
+                            @item.UsersWhoLike.Count</a>
                         <ul class="reactions-box dropdown-shadow">
                             <li class="reaction reaction-like" data-reaction="Like"></li>
                             <li class="reaction reaction-love" data-reaction="Love"></li>
@@ -94,8 +99,8 @@
                         </ul>
                     </span>
                 </div>
-                <a href="javascript:void(0)" class="post-card-buttons" id="show-comments"><i
-                        class='bx bx-message-rounded mr-2'></i> 5</a>
+                <a href="javascript:void(0)" class="post-card-buttons show-comments" data-item-id="@item.ID"><i
+                        class='bx bx-message-rounded mr-2'></i> @item.Comments.Count</a>
                 <div class="dropdown dropup share-dropup">
                     <a href="#" class="post-card-buttons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-share-alt mr-2'></i> Paylaş
@@ -134,7 +139,7 @@
                     </div>
                 </div>
             </div>
-            @await Component.InvokeAsync("_CommentSection")
+            @await Component.InvokeAsync("_CommentSection", item)
         </div>
     }
 </div>

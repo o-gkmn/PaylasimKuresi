@@ -11,6 +11,7 @@ public class User : IdentityUser<Guid>
     public DateTime? DateOfBirth { get; set; }
     public string? Gender { get; set; }
 
+    public ICollection<Post>? Posts { get; set; }
     public ICollection<Comment>? Comments { get; set; }
     public ICollection<CommentLike>? CommentLikes { get; set; }
     public ICollection<Community>? FounderOfCommunity { get; set; }

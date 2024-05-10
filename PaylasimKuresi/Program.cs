@@ -11,7 +11,7 @@ builder.Services.ConfigureIdentities();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureAutoMapper();
-builder.Services.ConfigureJwtBearer(builder.Configuration);
+builder.Services.ConfigureApplicationCookie();
 
 var app = builder.Build();
 

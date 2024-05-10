@@ -33,4 +33,5 @@ public class CreateUserDto
     [Required(ErrorMessage = "Cinsiyet seçiniz.")]
     public required string Gender { get; set; }
     public string? PhoneNumber { get; set; }
+    public string? ProfilePictureUrl { get; set; }
 }
