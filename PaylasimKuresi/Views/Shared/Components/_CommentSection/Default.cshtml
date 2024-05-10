@@ -1,4 +1,6 @@
-<div class="border-top pt-3 hide-comments" style="display: none;">
+@model GetPostDto
+
+<div class="border-top pt-3 hide-comments" style="display: none;" data-item-id="@Model.ID">
     <div class="row bootstrap snippets">
         <div class="col-md-12">
             <div class="comment-wrapper">
@@ -7,61 +9,59 @@
                         <ul class="media-list comments-list">
                             <li class="media comment-form">
                                 <a href="#" class="pull-left">
-                                    <img src="/template/assets/images/users/user-4.jpg" alt="" class="img-circle">
+                                    <img src="@Model.User.ProfilePictureUrl" alt="" class="img-circle">
                                 </a>
                                 <div class="media-body">
-                                    <form action="" method="" role="form">
+                                    @using (Html.BeginForm("SendComment", "Home", FormMethod.Post)){
+                                        <input type="hidden" name="PostID" value=@Model.ID />
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control comment-input"
-                                                        placeholder="Bir yorum yazın...">
+                                                    <input type="text" class="form-control comment-input" name="Content"
+                                                        placeholder="Bir Yorum Yazın...">
                                                     <div class="input-group-btn">
+                                                        <button type="submit"
+                                                            class="btn comment-form-btn comment-form-btn"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Gönder"><i
+                                                                class='bx bx-send'></i></button>
                                                         <button type="button" class="btn comment-form-btn"
                                                             data-toggle="tooltip" data-placement="top"
-                                                            title="Tooltip on top"><i
+                                                            title="Emoji Ekle"><i
                                                                 class='bx bxs-smiley-happy'></i></button>
                                                         <button type="button"
                                                             class="btn comment-form-btn comment-form-btn"
                                                             data-toggle="tooltip" data-placement="top"
-                                                            title="Tooltip on top"><i class='bx bx-camera'></i></button>
-                                                        <button type="button"
-                                                            class="btn comment-form-btn comment-form-btn"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            title="Tooltip on top"><i
-                                                                class='bx bx-microphone'></i></button>
-                                                        <button type="button" class="btn comment-form-btn"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            title="Tooltip on top"><i
-                                                                class='bx bx-file-blank'></i></button>
+                                                            title="Fotoğraf ekle"><i class='bx bx-camera'></i></button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    }
                                 </div>
                             </li>
-                            <li class="media">
-                                <a href="#" class="pull-left">
-                                    <img src="/template/assets/images/users/user-2.jpg" alt="" class="img-circle">
-                                </a>
-                                <div class="media-body">
-                                    <div class="d-flex justify-content-between align-items-center w-100">
-                                        <strong class="text-gray-dark"><a href="#" class="fs-8">Karen
-                                                Minas</a></strong>
-                                        <a href="#"><i class='bx bx-dots-horizontal-rounded'></i></a>
+                            @foreach (var item in Model.Comments)
+                            {
+                                <li class="media">
+                                    <a href="#" class="pull-left">
+                                        <img src="assets/images/users/user-2.jpg" alt="" class="img-circle">
+                                    </a>
+                                    <div class="media-body">
+                                        <div class="d-flex justify-content-between align-items-center w-100">
+                                            <strong class="text-gray-dark"><a href="#" class="fs-8">@item.User.FirstName @item.User.LastName</a></strong>
+                                            <a href="#"><i class='bx bx-dots-horizontal-rounded'></i></a>
+                                        </div>
+                                        <span class="d-block comment-created-time">@item.SentAt.ToString("dd/MM/yyyy hh:mm")</span>
+                                        <p class="fs-8 pt-2">
+                                            @item.Content <a href="#">#consecteturadipiscing </a>.
+                                        </p>
+                                        <div class="commentLR">
+                                            <button type="button" class="btn btn-link fs-8">Beğen</button>
+                                            <button type="button" class="btn btn-link fs-8">Yanıt Ver</button>
+                                        </div>
                                     </div>
-                                    <span class="d-block comment-created-time">30 min ago</span>
-                                    <p class="fs-8 pt-2">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                        Lorem ipsum dolor sit amet, <a href="#">#consecteturadipiscing </a>.
-                                    </p>
-                                    <div class="commentLR">
-                                        <button type="button" class="btn btn-link fs-8">Beğen</button>
-                                        <button type="button" class="btn btn-link fs-8">Cevap ver</button>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
