@@ -12,6 +12,7 @@ builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureApplicationCookie();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

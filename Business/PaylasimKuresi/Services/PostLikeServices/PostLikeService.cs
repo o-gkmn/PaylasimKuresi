@@ -2,26 +2,48 @@ using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using Business.PaylasimKuresi.Interfaces.PostLikeServices;
+using Business.PaylasimKuresi.Interfaces.UserServices;
 using DataAccess.Interfaces.PostLikeRepositories;
+using Microsoft.AspNetCore.Http;
 using Models.DTOs.PostLikeDTOs;
 using Models.Entities;
+using Models.Errors;
 
 namespace Business.PaylasimKuresi.Services.PostLikeServices;
 
 public class PostLikeService : IPostLikeService
 {
     private readonly IPostLikeRepository _postLikeRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserService _userService;
     private readonly IMapper _mapper;
 
-    public PostLikeService(IPostLikeRepository postLikeRepository, IMapper mapper)
+    public PostLikeService(IPostLikeRepository postLikeRepository,
+        IMapper mapper,
+        IHttpContextAccessor httpContextAccessor,
+        IUserService userService)
     {
         _postLikeRepository = postLikeRepository;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
+        _userService = userService;
     }
 
     public async Task<GetPostLikeDto> CreateAsync(CreatePostLikeDto entityDto)
     {
         var entity = _mapper.Map<PostLike>(entityDto);
+        var httpContext = _httpContextAccessor.HttpContext
+            ?? throw ServerError.HttpContextUnavailable;
+
+        if (httpContext.User == null)
+            throw SessionError.UserNotAuthenticated;
+        var user = await _userService.RetrieveUserByPrincipalAsync(httpContext.User)
+            ?? throw UserError.UserNotFound;
+
+        var userPostLikes = user.LikedPosts.Where(postLike => postLike.PostID == entityDto.PostID);
+        if (userPostLikes.Any())
+            throw DuplicateError.PostAlreadyLiked;
+
         var result = await _postLikeRepository.CreateAsync(entity);
 
         var createdEntityDto = _mapper.Map<GetPostLikeDto>(result);

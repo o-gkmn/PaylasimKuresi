@@ -1,5 +1,7 @@
 @model List<GetPostDto>
-
+@{
+    var userLikedPost = ViewBag.UserLikedPosts as ICollection<Models.Entities.PostLike>;
+}
 <div class="posts-section mb-5">
     @foreach (var item in Model)
     {
@@ -87,16 +89,22 @@
                 <!-- Reactions -->
                 <div class="argon-reaction">
                     <span class="like-btn">
-                        <a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i>
-                            @item.UsersWhoLike.Count</a>
-                        <ul class="reactions-box dropdown-shadow">
-                            <li class="reaction reaction-like" data-reaction="Like"></li>
-                            <li class="reaction reaction-love" data-reaction="Love"></li>
-                            <li class="reaction reaction-haha" data-reaction="HaHa"></li>
-                            <li class="reaction reaction-wow" data-reaction="Wow"></li>
-                            <li class="reaction reaction-sad" data-reaction="Sad"></li>
-                            <li class="reaction reaction-angry" data-reaction="Angry"></li>
-                        </ul>
+                        <a href="javascript:void(0)" class="post-card-buttons reactions" data-post-id="@item.ID">
+                            @{
+                                if (userLikedPost != null)
+                                {
+                                    var isLiked = userLikedPost.Where(pl => pl.PostID == item.ID).FirstOrDefault();
+                                    if (isLiked != null)
+                                    {
+                                        <i class="like-icon bx bx-up-arrow-circle" style="color: rgb(2, 132, 254);"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class='like-icon bx bx-up-arrow-circle'></i>
+                                    }
+                                }
+                            } <span class="like-count" data-post-id="@item.ID">@item.UsersWhoLike.Count</span>
+                        </a>
                     </span>
                 </div>
                 <a href="javascript:void(0)" class="post-card-buttons show-comments" data-item-id="@item.ID"><i
@@ -142,4 +150,35 @@
             @await Component.InvokeAsync("_CommentSection", item)
         </div>
     }
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".reactions").on("click", function (event) {
+                event.preventDefault();
+
+                var postId = $(this).data("post-id");
+                var likeIcon = $(this).find(".like-icon");
+
+                $(this).off("click");
+
+                $.ajax({
+                    contentType: "application/json",
+                    dataType: "json",
+                    type: "post",
+                    url: "/Home/LikePost",
+                    data: JSON.stringify({
+                        PostID: postId
+                    }),
+                    success: function (response) {
+                        $(".like-count[data-post-id='" + postId + "']").text(response.newLikeCount);
+                        likeIcon.css("color", "rgb(2, 132, 254)");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error sending post ID:", error);
+                    }
+                });
+            });
+        });
+    </script>
 </div>
