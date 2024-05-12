@@ -78,7 +78,8 @@ public static class ServiceExtensions
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<EFContext>(
-            options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")
+            options => options.UseLazyLoadingProxies()
+                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection")
             ));
     }
 

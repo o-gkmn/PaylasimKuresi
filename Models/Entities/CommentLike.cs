@@ -7,6 +7,6 @@ public class CommentLike
     public Guid UserID { get; set; }
     public DateTime LikedAt { get; set; }
 
-    public required Comment Comment { get; set; }
-    public required User User { get; set; }
+    public virtual required Comment Comment { get; set; }
+    public virtual required User User { get; set; }
 }

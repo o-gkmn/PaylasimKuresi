@@ -40,7 +40,9 @@ namespace DataAccess.DbContext
                 entity.HasOne(p => p.User)
                     .WithMany(oi => oi.Posts)
                     .HasForeignKey(ip => ip.UserID);
-                entity.HasMany(p => p.Comments);
+                entity.HasMany(p => p.Comments)
+                    .WithOne(oi => oi.Post)
+                    .HasForeignKey(ip => ip.PostID);
                 entity.HasMany(p => p.UsersWhoLike);
             });
 

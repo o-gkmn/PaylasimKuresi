@@ -8,8 +8,8 @@ public class Comment
     public DateTime SentAt { get; set; }
     public required string Content { get; set; }
 
-    public required User User { get; set; }
-    public required Post Post { get; set; }
+    public virtual required User User { get; set; }
+    public virtual required Post Post { get; set; }
 
-    public ICollection<CommentLike>? CommentLikes { get; set; }
+    public virtual ICollection<CommentLike>? CommentLikes { get; set; }
 }

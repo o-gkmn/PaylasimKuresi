@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using DataAccess.DbContext;
-using DataAccess.Extensions;
 using DataAccess.Interfaces.CommonOperations;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,8 +39,8 @@ namespace DataAccess.Repositories.CommonOperations
         public async Task<T?> GetAsync(Expression<Func<T, bool>> filter)
         {
             var result = await _dbContext.Set<T>()
-                .IncludeAllEntities(filter)
-                .FirstOrDefaultAsync();
+                //IncludeAllEntities(filter)
+                .FirstOrDefaultAsync(filter);
 
             return result;
         }
@@ -50,11 +49,12 @@ namespace DataAccess.Repositories.CommonOperations
         {
             if (filter == null)
                 return await _dbContext.Set<T>()
-                    .IncludeAllEntities()
+                    //IncludeAllEntities()
                     .ToListAsync();
             else
                 return await _dbContext.Set<T>()
-                    .IncludeAllEntities(filter)
+                    //IncludeAllEntities(filter)
+                    .Where(filter)
                     .ToListAsync();
         }
 

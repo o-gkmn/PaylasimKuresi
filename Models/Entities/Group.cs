@@ -8,6 +8,6 @@ public class Group
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public required User Founder { get; set; }
-    public required ICollection<GroupUser> Members { get; set; }
+    public virtual required User Founder { get; set; }
+    public virtual required ICollection<GroupUser> Members { get; set; }
 }

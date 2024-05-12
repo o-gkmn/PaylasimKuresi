@@ -7,6 +7,6 @@ public class Follow
     public Guid FollowedPersonID { get; set; }
     public DateTime FollowedAt { get; set; }
 
-    public required User FollowingPerson { get; set; }
-    public required User FollowedPerson { get; set; }
+    public virtual required User FollowingPerson { get; set; }
+    public virtual required User FollowedPerson { get; set; }
 }

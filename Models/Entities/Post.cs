@@ -10,18 +10,18 @@ public class Post
     public Guid? VideoPostID { get; set; }
     public Guid? VoicePostID { get; set; }
 
-    public TextPost? TextPost { get; set; }
-    public ImagePost? ImagePost { get; set; }
-    public VideoPost? VideoPost { get; set; }
-    public VoicePost? VoicePost { get; set; }
+    public virtual TextPost? TextPost { get; set; }
+    public virtual ImagePost? ImagePost { get; set; }
+    public virtual VideoPost? VideoPost { get; set; }
+    public virtual VoicePost? VoicePost { get; set; }
 
     public Guid CommunityID { get; set; }
     public required string Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public required User User { get; set; }
+    public virtual required User User { get; set; }
     //public required Community Community { get; set; }
 
-    public ICollection<Comment>? Comments { get; set; }
-    public required ICollection<PostLike> UsersWhoLike { get; set; }
+    public virtual ICollection<Comment>? Comments { get; set; }
+    public virtual required ICollection<PostLike> UsersWhoLike { get; set; }
 }

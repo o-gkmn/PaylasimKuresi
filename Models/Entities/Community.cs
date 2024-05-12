@@ -8,6 +8,6 @@ public class Community
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public required User Founder { get; set; }
-    public required ICollection<CommunityUser> CommunityUsers { get; set; }
+    public virtual required User Founder { get; set; }
+    public virtual required ICollection<CommunityUser> CommunityUsers { get; set; }
 }

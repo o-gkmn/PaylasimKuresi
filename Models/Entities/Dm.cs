@@ -9,6 +9,6 @@ public class Dm
     public DateTime SentAt { get; set; }
     public required string Status { get; set; }
 
-    public required User Sender { get; set; }
-    public required User Receiver { get; set; }
+    public virtual required User Sender { get; set; }
+    public virtual required User Receiver { get; set; }
 }
