@@ -1,0 +1,12 @@
+<html>
+    @await Html.PartialAsync("/Views/MessageLayoutPartial/_HeadPartial.cshtml");
+
+    <body>
+
+        @await Html.PartialAsync("/Views/LayoutPartial/_NavbarPartial.cshtml")
+
+        @RenderBody();
+
+        @await Html.PartialAsync("/Views/MessageLayoutPartial/_ScriptPartial.cshtml");
+    </body>
+</html>

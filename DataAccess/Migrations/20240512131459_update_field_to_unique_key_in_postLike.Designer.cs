@@ -4,6 +4,7 @@ using DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(EFContext))]
-    partial class EFContextModelSnapshot : ModelSnapshot
+    [Migration("20240512131459_update_field_to_unique_key_in_postLike")]
+    partial class update_field_to_unique_key_in_postLike
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,8 +178,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CommentID");
 
-                    b.HasIndex("UserID", "CommentID")
-                        .IsUnique();
+                    b.HasIndex("UserID");
 
                     b.ToTable("CommentLikes");
                 });

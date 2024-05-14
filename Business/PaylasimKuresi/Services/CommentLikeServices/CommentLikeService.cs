@@ -2,26 +2,52 @@ using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using Business.PaylasimKuresi.Interfaces.CommentLikeServices;
+using Business.PaylasimKuresi.Interfaces.UserServices;
 using DataAccess.Interfaces.CommentLikeRepositories;
+using Microsoft.AspNetCore.Http;
 using Models.DTOs.CommentLikeDTOs;
 using Models.Entities;
+using Models.Errors;
 
 namespace Business.PaylasimKuresi.Services.CommentLikeServices;
 
 public class CommentLikeService : ICommentLikeService
 {
     private readonly ICommentLikeRepository _commentLikeRepository;
+    private readonly IUserService _userService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
 
-    public CommentLikeService(ICommentLikeRepository commentLikeRepository, IMapper mapper)
+    public CommentLikeService(ICommentLikeRepository commentLikeRepository,
+        IMapper mapper,
+        IHttpContextAccessor httpContextAccessor,
+        IUserService userService)
     {
         _commentLikeRepository = commentLikeRepository;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
+        _userService = userService;
     }
 
     public async Task<GetCommentLikeDto> CreateAsync(CreateCommentLikeDto entityDto)
     {
         var entity = _mapper.Map<CommentLike>(entityDto);
+        var httpContext = _httpContextAccessor.HttpContext
+                ?? throw ServerError.HttpContextUnavailable;
+
+        if (httpContext.User == null)
+            throw SessionError.UserNotAuthenticated;
+
+        var user = await _userService.RetrieveUserByPrincipalAsync(httpContext.User)
+            ?? throw UserError.UserNotFound;
+
+        if (user.CommentLikes != null)
+        {
+            var userCommentLikes = user.CommentLikes.Where(commentLike => commentLike.CommentID == entityDto.CommentID);
+            if (userCommentLikes.Any())
+                throw DuplicateError.PostAlreadyLiked;
+        }
+
         var result = await _commentLikeRepository.CreateAsync(entity);
 
         var createdEntityDto = _mapper.Map<GetCommentLikeDto>(result);

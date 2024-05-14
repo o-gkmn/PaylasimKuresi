@@ -1,0 +1,81 @@
+@model List<GetDmDto>
+@{
+    var user = (GetUserDto)ViewBag.user;
+    var chosenConversation = Guid.Empty;
+}
+
+<div class="message-sidepanel">
+    <div class="message-profile">
+        <div class="wrap">
+            <img src="/template/assets/images/users/user-4.jpg" class="online conv-img" alt="Conversation user" />
+            <p>@user.FirstName @user.LastName</p>
+        </div>
+    </div>
+    <div class="message-search position-relative d-flex">
+        <label for=""><i class='bx bx-search'></i></label>
+        <input type="text" class="form-control search-input" placeholder="Konuşmaları arayın..." />
+        <button type="button" class="btn btn-create-conversation" data-toggle="modal" data-target="#newConversation"><i
+                class='bx bx-pencil'></i></button>
+    </div>
+    <div class="message-contacts">
+        <ul class="conversations">
+            @foreach (var item in Model)
+            {
+                <li class="contact messenger-user" data-conversation-id="@item.ID" onclick="loadConversationPage(this)">
+                    <div class="wrap">
+                        @{
+                            if (item.ReceiverID != user.Id)
+                            {
+                                <img src=@item.Receiver.ProfilePictureUrl alt="Conversation user" />
+                            }
+                            else
+                            {
+                                <img src=@item.Sender.ProfilePictureUrl alt="Conversation user" />
+                            }
+                        }
+                        <div class="meta">
+                            @{
+                                if (item.ReceiverID != user.Id)
+                                {
+                                    <p class="name">@item.Receiver.FirstName @item.Receiver.LastName</p>
+                                }
+                                else
+                                {
+                                    <p class="name">@item.Sender.FirstName @item.Sender.LastName</p>
+                                }
+                            }
+                            <p class="preview">@item.Content</p>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div id="conversationPageContainer">
+    @await Component.InvokeAsync("_MessageConversationPage", new { conversationId = chosenConversation })
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function loadConversationPage(element) {
+        var conversation_Id = element.getAttribute("data-conversation-id");
+        console.log(conversation_Id);
+        
+        $('#conversationPageContainer').load('Message/LoadConversationPage', {
+                ArgumentName: conversation_Id });
+        /* $.ajax({
+            contentType: "application/json",
+            dataType: "json",
+            url: `/Message/LoadConversationPage`,
+            type: 'post',
+            data: JSON.stringify({ conversationId: conversation_Id }),
+            success: function (response) {
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading conversation page:", error);
+            }
+        }); */
+    }
+</script>

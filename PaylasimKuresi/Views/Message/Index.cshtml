@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_MessageLayout.cshtml";
+}
+
+<div class="row message-right-side-content">
+    <div class="col-md-12">
+        <div id="message-frame">
+            @await Component.InvokeAsync("_MessageSidePanel")
+        </div>
+    </div>
+</div>
+
+@await Component.InvokeAsync("_NewConversation")

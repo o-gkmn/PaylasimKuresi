@@ -39,7 +39,8 @@ namespace DataAccess.DbContext
                     .HasForeignKey<Post>(oi => oi.VoicePostID);
                 entity.HasOne(p => p.User)
                     .WithMany(oi => oi.Posts)
-                    .HasForeignKey(ip => ip.UserID);
+                    .HasForeignKey(ip => ip.UserID)
+                    .OnDelete(DeleteBehavior.Restrict); ;
                 entity.HasMany(p => p.Comments)
                     .WithOne(oi => oi.Post)
                     .HasForeignKey(ip => ip.PostID);
@@ -82,6 +83,9 @@ namespace DataAccess.DbContext
                 entity.HasOne(p => p.User)
                     .WithMany(oi => oi.CommentLikes)
                     .HasForeignKey(ip => ip.UserID);
+                modelBuilder.Entity<CommentLike>()
+                    .HasIndex(cl => new { cl.UserID, cl.CommentID })
+                    .IsUnique();
             });
 
             modelBuilder.Entity<CommunityUser>(entity =>
@@ -146,6 +150,10 @@ namespace DataAccess.DbContext
                 entity.HasOne(p => p.Post)
                     .WithMany(oi => oi.UsersWhoLike)
                     .HasForeignKey(ip => ip.PostID);
+                modelBuilder.Entity<PostLike>()
+                    .HasIndex(pl => new { pl.UserID, pl.PostID })
+                    .IsUnique();
+
             });
 
             base.OnModelCreating(modelBuilder);

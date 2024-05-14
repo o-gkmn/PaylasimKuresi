@@ -1,0 +1,65 @@
+@model List<GetDmDto>
+
+@{
+    var user = ViewBag.user as GetUserDto;
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12 messenger-top-section">
+            <div class="contact-profile d-flex align-items-center justify-content-between">
+                <div class="messenger-top-luser df-aic">
+                    <img src="/template/assets/images/users/user-6.png" class="messenger-user"
+                        alt="Convarsation user image" />
+                    <a href="#" class="message-profile-name">Susan P. Jarvis</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="messages" style="height: 550px;">
+                <ul class="messages-content">
+                    @foreach (var item in Model)
+                    {
+                        if (item.SenderID == user.Id)
+                        {
+                            <li class="message-reply">
+                                <p>@item.Content</p>
+                            </li>
+                        }
+                        else if (item.ReceiverID == user.Id)
+                        {
+                            <li class="message-receive">
+                                <img src="@item.Receiver.ProfilePictureUrl" alt="Conversation user image" />
+                                <p>@item.Content</p>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-12">
+            @*Mesaj yazılan kısım*@
+            <div class="message-input">
+                <div class="wrap">
+                    <form class="d-inline form-inline">
+                        <div class="d-flex align-items-center messenger-icons">
+                            <div class="input-group messenger-input">
+                                <input type="text" class="form-control search-input" placeholder="Bir mesaj yazın..."
+                                    aria-label="Type a message..." aria-describedby="button-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn search-button" type="button" id="button-addon2 send-message">
+                                        <img src="/template/assets/images/icons/messenger/m-smile.png"
+                                            alt="Messenger icons">
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn search-button" id="send-message">
+                                <img src="/template/assets/images/icons/messenger/m-send.png" alt="Messenger icons">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

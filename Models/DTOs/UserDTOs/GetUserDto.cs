@@ -11,6 +11,8 @@ public class GetUserDto
     public string? Description { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public string? Gender { get; set; }
+    public required string Email { get; set; }
+    public required string UserName { get; set; }
 
     public ICollection<Comment>? Comments { get; set; }
     public ICollection<CommentLike>? CommentLikes { get; set; }

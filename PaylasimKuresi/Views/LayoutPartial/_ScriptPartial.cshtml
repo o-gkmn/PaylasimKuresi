@@ -64,3 +64,34 @@
         });
     });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        console.log("Çalıştı");
+        $(".comment-like-button").on("click", function (event) {
+            event.preventDefault();
+
+            var commentId = $(this).data("comment-id");
+            var clickedButton = $(this);
+
+            $(this).off("click");
+
+            $.ajax({
+                contentType: "application/json",
+                dataType: "json",
+                type: "post",
+                url: "/Home/LikeComment",
+                data: JSON.stringify({
+                    CommentID: commentId
+                }),
+                success: function (response) {
+                    clickedButton.css("color", "rgb(2, 132, 254)")
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error sending comment ID:", error);
+                }
+            });
+        });
+    });
+</script>

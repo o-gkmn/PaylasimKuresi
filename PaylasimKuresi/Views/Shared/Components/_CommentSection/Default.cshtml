@@ -1,4 +1,7 @@
 @model GetPostDto
+@{
+    var userCommentLikes = ViewBag.UserLikedComments as ICollection<Models.Entities.CommentLike>;
+}
 
 <div class="border-top pt-3 hide-comments" style="display: none;" data-item-id="@Model.ID">
     <div class="row bootstrap snippets">
@@ -44,7 +47,7 @@
                             {
                                 <li class="media">
                                     <a href="#" class="pull-left">
-                                        <img src="assets/images/users/user-2.jpg" alt="" class="img-circle">
+                                        <img src=@item.User.ProfilePictureUrl alt="" class="img-circle">
                                     </a>
                                     <div class="media-body">
                                         <div class="d-flex justify-content-between align-items-center w-100">
@@ -53,10 +56,24 @@
                                         </div>
                                         <span class="d-block comment-created-time">@item.SentAt.ToString("dd/MM/yyyy hh:mm")</span>
                                         <p class="fs-8 pt-2">
-                                            @item.Content <a href="#">#consecteturadipiscing </a>.
+                                            @item.Content
                                         </p>
                                         <div class="commentLR">
-                                            <button type="button" class="btn btn-link fs-8">Beğen</button>
+                                            @{
+                                                if(userCommentLikes != null)
+                                                {
+                                                    var isLiked = userCommentLikes.Where(cl => cl.CommentID == item.ID).FirstOrDefault();
+                                                    if(isLiked != null)
+                                                    {
+                                                        <button type="button" class="comment-like-button btn btn-link fs-8" data-comment-id="@item.ID" style="color: rgb(2, 132, 254);">Beğen</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="comment-like-button btn btn-link fs-8" data-comment-id="@item.ID" style="color: gray;">Beğen</button>
+                                                    }
+                                                
+                                                }
+                                            }
                                             <button type="button" class="btn btn-link fs-8">Yanıt Ver</button>
                                         </div>
                                     </div>
