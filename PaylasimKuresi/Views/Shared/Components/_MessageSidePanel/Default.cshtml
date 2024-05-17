@@ -1,13 +1,12 @@
 @model List<GetDmDto>
 @{
     var user = (GetUserDto)ViewBag.user;
-    var chosenConversation = Guid.Empty;
 }
 
 <div class="message-sidepanel">
     <div class="message-profile">
         <div class="wrap">
-            <img src="/template/assets/images/users/user-4.jpg" class="online conv-img" alt="Conversation user" />
+            <img src="@user.ProfilePictureUrl" class="online conv-img" alt="Conversation user" />
             <p>@user.FirstName @user.LastName</p>
         </div>
     </div>
@@ -53,29 +52,25 @@
     </div>
 </div>
 
-<div id="conversationPageContainer">
-    @await Component.InvokeAsync("_MessageConversationPage", new { conversationId = chosenConversation })
+<div id="conversationSection">
+    @await Component.InvokeAsync("_MessageConversationPage", new { Guid.Empty })
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function loadConversationPage(element) {
         var conversation_Id = element.getAttribute("data-conversation-id");
-        console.log(conversation_Id);
-        
-        $('#conversationPageContainer').load('Message/LoadConversationPage', {
-                ArgumentName: conversation_Id });
-        /* $.ajax({
-            contentType: "application/json",
-            dataType: "json",
-            url: `/Message/LoadConversationPage`,
-            type: 'post',
-            data: JSON.stringify({ conversationId: conversation_Id }),
+
+        $.ajax({
+            url: `/Message/UpdateConversationSection`,
+            type: 'get',
+            data: { conversationId: conversation_Id.toString() },
             success: function (response) {
+                $('#conversationSection').html(response);
             },
             error: function (xhr, status, error) {
                 console.error("Error loading conversation page:", error);
             }
-        }); */
+        });
     }
 </script>

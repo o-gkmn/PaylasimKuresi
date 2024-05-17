@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Models.Entities;
 
 namespace Models.DTOs.DmDTOs;
@@ -11,6 +12,8 @@ public class GetDmDto
     public DateTime SentAt { get; set; }
     public required string Status { get; set; }
 
-    public required User Sender { get; set; }
-    public required User Receiver { get; set; }
+    [JsonIgnore]
+    public User? Sender { get; set; }
+    [JsonIgnore]
+    public User? Receiver { get; set; }
 }
