@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Models.Entities;
 
 namespace Models.DTOs.UserDTOs;
@@ -14,15 +15,36 @@ public class GetUserDto
     public required string Email { get; set; }
     public required string UserName { get; set; }
 
+    [JsonIgnore]
     public ICollection<Comment>? Comments { get; set; }
+
+    [JsonIgnore]
     public ICollection<CommentLike>? CommentLikes { get; set; }
+
+    [JsonIgnore]
     public ICollection<Community>? FounderOfCommunity { get; set; }
-    public required ICollection<CommunityUser> MemberCommunities { get; set; }
-    public required ICollection<Dm> Senders { get; set; }
-    public required ICollection<Dm> Receivers { get; set; }
-    public required ICollection<Follow> Followers { get; set; }
-    public required ICollection<Follow> Following { get; set; }
-    public required ICollection<Group> FounderOfGroups { get; set; }
-    public required ICollection<GroupUser> MemberGroups { get; set; }
-    public required ICollection<PostLike> LikedPosts { get; set; }
+
+    [JsonIgnore]
+    public ICollection<CommunityUser>? MemberCommunities { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Dm>? Senders { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Dm>? Receivers { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Follow>? Followers { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Follow>? Following { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Group>? FounderOfGroups { get; set; }
+
+    [JsonIgnore]
+    public ICollection<GroupUser>? MemberGroups { get; set; }
+
+    [JsonIgnore]
+    public ICollection<PostLike>? LikedPosts { get; set; }
 }

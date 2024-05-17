@@ -1,4 +1,5 @@
 using Business.PaylasimKuresi.Extensions;
+using Business.PaylasimKuresi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.ConfigureRepositories();
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureApplicationCookie();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -30,6 +32,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllers();
+app.MapHub<MessageHub>("/messageHub");
 
 app.MapControllerRoute(
     name: "default",

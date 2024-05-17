@@ -63,10 +63,30 @@ public class MessageController : Controller
         return RedirectToAction("Index");
     }
 
-    [Route("LoadConversationPage")]
-    [HttpPost]
-    public IActionResult LoadConversationPage([FromBody] Guid conversationId)
+    [Route("UpdateConversationSection")]
+    [HttpGet]
+    public IActionResult UpdateConversationSection(Guid conversationId)
     {
         return ViewComponent("_MessageConversationPage", new { conversationId });
+    }
+
+    [Route("SendMessage")]
+    [HttpPost]
+    public async Task<IActionResult> SendMessage([FromBody] CreateDmDto createDmDto)
+    {
+        var user = await _userService.RetrieveUserByPrincipalAsync(User);
+        if (user == null)
+            return RedirectToAction("Index", "SignIn");
+
+        createDmDto.SenderID = user.Id;
+        createDmDto.Status = "Send";
+        createDmDto.SentAt = DateTime.Now;
+
+        if (ModelState.IsValid)
+        {
+            var result = await _dmService.CreateAsync(createDmDto);
+            return new JsonResult(new { result });
+        }
+        return View();
     }
 }

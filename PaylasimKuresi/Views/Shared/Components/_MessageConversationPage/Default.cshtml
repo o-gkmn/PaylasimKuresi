@@ -1,65 +1,191 @@
 @model List<GetDmDto>
+@using Newtonsoft.Json
 
 @{
     var user = ViewBag.user as GetUserDto;
+    var receiverUser = ViewBag.receiverUser as GetUserDto;
+
+    if (receiverUser == null)
+    {
+        <text>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#row').html('');
+                });
+            </script>
+        </text>
+    }
 }
 
-<div class="content">
-    <div class="row">
-        <div class="col-md-12 messenger-top-section">
-            <div class="contact-profile d-flex align-items-center justify-content-between">
-                <div class="messenger-top-luser df-aic">
-                    <img src="/template/assets/images/users/user-6.png" class="messenger-user"
-                        alt="Convarsation user image" />
-                    <a href="#" class="message-profile-name">Susan P. Jarvis</a>
+<div id="top-container">
+    <div class="content">
+        <div class="row" id="row">
+            <div class="col-md-12 messenger-top-section">
+                <div class="contact-profile d-flex align-items-center justify-content-between">
+                    <div class="messenger-top-luser df-aic">
+                        @{
+                            if (receiverUser != null)
+                            {
+                                <img src="@receiverUser.ProfilePictureUrl" class="messenger-user"
+                                    alt="Convarsation user image" />
+                                <a href="#" class="message-profile-name">@receiverUser.FirstName @receiverUser.LastName</a>
+                            }
+                            else
+                            {
+                                <img src="" class="messenger-user" alt="Convarsation user image" />
+                                <a href="#" class="message-profile-name"></a>
+                            }
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <div class="messages" style="height: 550px;">
-                <ul class="messages-content">
-                    @foreach (var item in Model)
-                    {
-                        if (item.SenderID == user.Id)
+            <div class="col-md-12">
+                <div class="messages" style="height: 550px;">
+                    <ul class="messages-content">
+                        @foreach (var item in Model)
                         {
-                            <li class="message-reply">
-                                <p>@item.Content</p>
-                            </li>
+                            if (item.SenderID == user.Id)
+                            {
+                                <li class="message-reply">
+                                    <p>@item.Content</p>
+                                </li>
+                            }
+                            else if (item.ReceiverID == user.Id)
+                            {
+                                <li class="message-receive">
+                                    <img src="@item.Receiver.ProfilePictureUrl" alt="Conversation user image" />
+                                    <p>@item.Content</p>
+                                </li>
+                            }
                         }
-                        else if (item.ReceiverID == user.Id)
-                        {
-                            <li class="message-receive">
-                                <img src="@item.Receiver.ProfilePictureUrl" alt="Conversation user image" />
-                                <p>@item.Content</p>
-                            </li>
-                        }
-                    }
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            @*Mesaj yazılan kısım*@
-            <div class="message-input">
-                <div class="wrap">
-                    <form class="d-inline form-inline">
-                        <div class="d-flex align-items-center messenger-icons">
-                            <div class="input-group messenger-input">
-                                <input type="text" class="form-control search-input" placeholder="Bir mesaj yazın..."
-                                    aria-label="Type a message..." aria-describedby="button-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn search-button" type="button" id="button-addon2 send-message">
-                                        <img src="/template/assets/images/icons/messenger/m-smile.png"
-                                            alt="Messenger icons">
-                                    </button>
+            <div class="col-md-12">
+                <div class="message-input">
+                    <div class="wrap">
+                        <form class="d-inline form-inline">
+                            <div class="d-flex align-items-center messenger-icons">
+                                <div class="input-group messenger-input">
+                                    @if (receiverUser != null)
+                                    {
+                                        <input type="hidden" value="@receiverUser.Id" id="ReceiverId">
+                                        <input type="hidden" value="@receiverUser.UserName" id="ReceiverUserName">
+                                    }
+                                    <input type="text" class="form-control search-input" placeholder="Type a message..."
+                                        aria-label="Type a message..." aria-describedby="button-addon2" id="Content">
+                                    <div class="input-group-append">
+                                        <button class="btn search-button" type="button" id="button-addon2 send-message">
+                                            <img src="/template/assets/images/icons/messenger/m-smile.png"
+                                                alt="Messenger icons">
+                                        </button>
+                                    </div>
                                 </div>
+                                <button type="button" class="btn search-button" id="postMessage">
+                                    <img src="/template/assets/images/icons/messenger/m-send.png" alt="Messenger icons">
+                                </button>
                             </div>
-                            <button type="button" class="btn search-button" id="send-message">
-                                <img src="/template/assets/images/icons/messenger/m-send.png" alt="Messenger icons">
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script>
+    function loadConversationPage(conversation_Id) {
+        $.ajax({
+            url: `/Message/UpdateConversationSection`,
+            type: 'get',
+            data: { conversationId: conversation_Id.toString() },
+            success: function (response) {
+                $('#top-container').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading conversation page:", error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        function scrollToBottom(container) {
+            container.scrollTop(container[0].scrollHeight);
+        }
+
+        var messagesContainer = $('.messages');
+        scrollToBottom(messagesContainer);
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/messageHub").build();
+
+        connection.start().then(function () {
+            console.log("SignalR Connected.");
+            var username = "@user.UserName.ToString()";
+            if (username != null) {
+                connection.invoke("Register", username.toString()).catch(err => console.error(err.toString()));
+            }
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (dm, sender) {
+            const messageContent = dm["content"];
+            const userProfilePic = sender["profilePictureUrl"];
+
+            let msgHtml = `
+            <li class="message-receive">
+                <img src="${userProfilePic}" alt="Conversation user image" />
+                <p>${messageContent}</p>
+            </li>`;
+
+            $(".messages-content").append(msgHtml);
+            scrollToBottom($('.messages'));
+        });
+
+        function SendMessage() {
+            var receiver_id = $('#ReceiverId').val();
+            var receiver_userName = $('#ReceiverUserName').val();
+            var content = $('#Content').val();
+            $('#Content').val('');
+
+            $.ajax({
+                contentType: "application/json",
+                dataType: "json",
+                url: "/Message/SendMessage",
+                type: "post",
+                data: JSON.stringify({ ReceiverID: receiver_id.toString(), Content: content.toString(), Status: "Send", ReceiverUserName: receiver_userName }),
+                success: function (response) {
+                    let { $id, ...newResponse } = response["result"];
+                    var data = JSON.stringify(newResponse);
+                    connection.invoke("SendMessageToUser", data).catch(err => console.error(err.toString()));
+
+                    const messageContent = newResponse["Content"];
+                    let msgHtml = `
+                        <li class="message-reply">
+                            <p>${messageContent}</p>
+                        </li>`;
+
+                    $(".messages-content").append(msgHtml);
+                    scrollToBottom($('.messages'));
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error is ", error);
+                }
+            });
+        }
+
+        $("#row").on("click", "#postMessage", function (event) {
+            SendMessage();
+        });
+        $('#Content').on("keydown", function (event) {
+            var keycode = event.keyCode || event.which;
+            if (keycode == '13') {
+                event.preventDefault();
+                SendMessage();
+            }
+        });
+    });
+</script>

@@ -115,23 +115,3 @@ $('#close-chatbox').on('click', function () {
 $('#messagebody').animate({
     scrollTop: $('#messagebody').prop('scrollHeight')
 });
-
-// Send message with Enter key
-$('.type-message').on("keydown", function (event) {
-    var keycode = event.keyCode || event.which;
-    var chat = $(".type-message").val();
-    if (keycode == '13') {
-        var body = '<div class="row msg_container base_sent">' +
-            '<div class="col-md-10 col-xs-10 ">' +
-            '<div class="messages message-reply bg-primary shadow-sm">' +
-            '<p>' + chat + '</p>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
-        $(".type-message").val("");
-        $(body).appendTo("#messagebody");
-        $("#messagebody").animate({
-            scrollTop: $("#messagebody")[0].scrollHeight
-        }, 'slow');
-    }
-});
