@@ -1,12 +1,9 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using AutoMapper;
 using Business.PaylasimKuresi.Interfaces.UserServices;
 using Microsoft.AspNetCore.SignalR;
 using Models.DTOs.DmDTOs;
-using Models.DTOs.UserDTOs;
-using Models.Entities;
 
 namespace Business.PaylasimKuresi.Hubs;
 
