@@ -1,7 +1,9 @@
+using AutoMapper;
 using Business.PaylasimKuresi.Interfaces.DmServices;
 using Business.PaylasimKuresi.Interfaces.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.DmDTOs;
+using Models.DTOs.UserDTOs;
 
 namespace PaylasimKuresi.Controllers;
 
@@ -10,11 +12,13 @@ public class MessageController : Controller
 {
     private readonly IUserService _userService;
     private readonly IDmService _dmService;
+    private readonly IMapper _mapper;
 
-    public MessageController(IDmService dmService, IUserService userService)
+    public MessageController(IDmService dmService, IUserService userService, IMapper mapper)
     {
         _dmService = dmService;
         _userService = userService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -88,5 +92,29 @@ public class MessageController : Controller
             return new JsonResult(new { result });
         }
         return View();
+    }
+
+    [Route("GetMessage")]
+    [HttpGet]
+    public async Task<IActionResult> GetMessage()
+    {
+        var user = await _userService.RetrieveUserByPrincipalAsync(User);
+        if (user == null)
+            return RedirectToAction("Index", "SignIn");
+
+        var dms = await _dmService.GetListAsync(dm => dm.ReceiverID == user.Id);
+        var dmsSender = dms.OrderByDescending(dm => dm.SentAt)
+            .Take(5)
+            .Distinct()
+            .Select(dm => dm.Sender)
+            .ToList();
+
+        var mappedDmsSender = _mapper.Map<List<GetUserDto>>(dmsSender);
+        dms = dms
+            .OrderByDescending(dm => dm.SentAt)
+            .Take(5)
+            .Distinct()
+            .ToList();
+        return new JsonResult(new { dms, mappedDmsSender });
     }
 }
