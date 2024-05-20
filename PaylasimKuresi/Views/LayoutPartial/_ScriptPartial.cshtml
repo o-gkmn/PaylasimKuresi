@@ -94,3 +94,40 @@
         });
     });
 </script>
+
+<script src="/template/assets/js/bootstrap/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#createCommunityFormBtn').on("click", function (event) {
+            $('#newCommunity').modal('show');
+        });
+
+        $('#createCommunityBtn').on("click", function (event) {
+            let communityName = $('#communityName').val();
+            let communityDescription = $('#communityDescription').val();
+
+            $.ajax({
+                contentType: "application/json",
+                dataType: "json",
+                url: "/Community/Create",
+                method: "POST",
+                data: JSON.stringify({ Name: communityName, Description: communityDescription }),
+                success: function (response) {
+                    if (response.validationErrors) {
+                        var modalTitleText = $('#errorMessage').text(response.errorMessage);
+                    } else {
+                        $('#newCommunity').modal('hide');
+                        $('#newCommunity').on('hidden.bs.modal', function () {
+                            $('.modal-backdrop').remove();
+                        });
+                        $('#communityName').val("");
+                        $('#communityDescription').val("");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error is ", xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

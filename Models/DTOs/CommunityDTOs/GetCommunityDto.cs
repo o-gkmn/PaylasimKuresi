@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Models.Entities;
 
 namespace Models.DTOs.CommunityDTOs;
@@ -10,6 +11,9 @@ public class GetCommunityDto
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public required User Founder { get; set; }
-    public required ICollection<CommunityUser> CommunityUsers { get; set; }
+    [JsonIgnore]
+    public User? Founder { get; set; }
+
+    [JsonIgnore]
+    public ICollection<CommunityUser>? CommunityUsers { get; set; }
 }

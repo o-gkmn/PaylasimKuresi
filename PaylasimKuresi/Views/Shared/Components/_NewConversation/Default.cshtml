@@ -23,10 +23,10 @@
                         <textarea class="form-control search-input" rows="5" id="message-text" name="Content"
                             placeholder="Bir mesaj yazın..."></textarea>
                     </div>
-            <div class="modal-footer new-msg-footer" style="display: flex; justify-content: space-between">
-                <span id="errorMessage" style="display: inline-block;"></span>
-                <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
-            </div>
+                    <div class="modal-footer new-msg-footer" style="display: flex; justify-content: space-between">
+                        <span id="errorMessage" style="display: inline-block;"></span>
+                        <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -42,20 +42,20 @@
 
             var formDataArray = $(this).serializeArray();
             var jsonObject = {};
-            formDataArray.forEach(function(item) {
+            formDataArray.forEach(function (item) {
                 jsonObject[item.name] = item.value;
-            });            
-            
+            });
+
             $.ajax({
                 contentType: "application/json",
                 dataType: "json",
                 type: "post",
                 url: "/Message/CreateNewConversation",
                 data: JSON.stringify(jsonObject),
-                success: function (response){
-                    if(response.validationErrors){
+                success: function (response) {
+                    if (response.validationErrors) {
                         var modalTitleText = $('#errorMessage').text(response.errorMessage);
-                    }else {
+                    } else {
                         $('#newConversation').modal('hide');
                     }
                 },

@@ -1,0 +1,212 @@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_Layout.cshtml";
+    var participatedCommunities = ViewBag.ParticipatedCommunities as List<GetCommunityDto>;
+    var suggestedCommunities = ViewBag.SuggestedCommunities as List<GetCommunityDto>;
+}
+
+<div class="col-md-10 second-section" id="page-content-wrapper">
+    <div class="mb-3">
+        <div class="btn-group d-flex top-links-fg">
+            <a href="index.html" class="btn btn-quick-links mr-3 ql-active">
+                <img src="/template/assets/images/icons/theme/group-white.png" class="mr-2" alt="quick links icon">
+                <span class="fs-8">Toplulukların</span>
+            </a>
+            <a href="#" class="btn btn-quick-links" id="createCommunityFormBtn">
+                <img src="/template/assets/images/icons/theme/create.png" class="mr-2" alt="quick links icon">
+                <span class="fs-8">Yeni topluluk oluştur</span>
+            </a>
+        </div>
+    </div>
+    <!-- Groups -->
+    <div class="groups bg-white py-3 px-4 shadow-sm">
+        <div class="card-head d-flex justify-content-between">
+            <h5 class="mb-4">Toplulukların</h5>
+            <a href="#" class="btn btn-link" id="seeAllPartCommBtn">Hepsini Gör</a>
+        </div>
+        <div class="row" id="participatedRow">
+            @if (participatedCommunities.Count == 0)
+            {
+                <div class="col-sm-6">
+                    <h6>Katıldığın herhangi bir topluluk bulunmuyor.</h6>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in participatedCommunities)
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card group-card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name </h5>
+                                <p class="card-text">@item.Description</p>
+                                <a href="#" class="btn btn-quick-link join-group-btn border w-100">Göz at</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <hr class="my-5">
+    <div class="groups bg-white py-3 px-4 shadow-sm">
+        <div class="card-head d-flex justify-content-between">
+            <h5 class="mb-4">Toplulukları keşfet</h5>
+            <a href="#" class="btn btn-link" id="seeAllSuggestComm">Hepsini Gör</a>
+        </div>
+        <div class="row" id="suggestedRow">
+            @if (suggestedCommunities.Count == 0)
+            {
+                <div class="col-sm-6">
+                    <h6>Önerilecek herhangi bir topluluk bulunmuyor.</h6>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in suggestedCommunities)
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card group-card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name </h5>
+                                <p class="card-text">@item.Description</p>
+                                <a href="javascript:void(0)" class="btn btn-quick-link join-group-btn border w-100 joinGroupBtn"
+                                    data-community-id="@item.ID">Katıl</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@* Conversation Model *@
+<div class="modal fade" id="newCommunity" tabindex="-1" role="dialog" aria-labelledby="newCommunityLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header new-msg-header">
+                <h5 class="modal-title" id="newConversationLabel">Yeni bir topluluk oluştur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body new-msg-body">
+                <form class="new-msg-form" id="newCommunityForm">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Topluluk İsmi:</label>
+                        <input type="text" class="form-control search-input" id="communityName"
+                            placeholder="İsim girin...">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Tanıtım:</label>
+                        <textarea class="form-control search-input" rows="5" id="communityDescription"
+                            placeholder="Topluluğunuzu tanıtın..."></textarea>
+                    </div>
+                    <div class="modal-footer new-msg-footer" style="display: flex; justify-content: space-between">
+                        <span id="errorMessage" style="display: inline-block;"></span>
+                        <button type="button" class="btn btn-primary btn-sm" id="createCommunityBtn">Topluluk
+                            Oluştur</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#seeAllPartCommBtn').on("click", function (event) {
+            event.preventDefault();
+            $.ajax({
+                contentType: "application/json",
+                type: "get",
+                url: "/Community/GetAllParticipatedCommunities",
+                success: function (response) {
+                    var data = response["participatedCommunities"];
+                    $('#participatedRow').empty();
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; ++i) {
+                            var cardHtml = '<div class="col-md-3 col-sm-6">' +
+                                '<div class="card group-card shadow-sm">' +
+                                '<div class="card-body">' +
+                                '<h5 class="card-title">' + data[i]["name"] + '</h5>' +
+                                '<p class="card-text">' + data[i]["description"] + '</p>' +
+                                '<a href="#" class="btn btn-quick-link join-group-btn border w-100">Göz at</a>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+                            $('#participatedRow').append(cardHtml);
+                        }
+                    } else {
+                        var errHtml = '<div class="col-sm-6">' +
+                            '<h6>Katıldığın herhangi bir topluluk bulunmuyor.</h6>' +
+                            '</div>';
+                        $('#participatedRow').append(errHtml);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error is ", xhr.responseText);
+                }
+            });
+        });
+
+        $('#seeAllSuggestComm').on("click", function (event) {
+            event.preventDefault();
+            $.ajax({
+                contentType: "application/json",
+                type: "get",
+                url: "/Community/GetAllSuggestedCommunities",
+                success: function (response) {
+                    var data = response["suggestedCommunities"];
+                    $('#suggestedRow').empty();
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; ++i) {
+                            var cardHtml = '<div class="col-md-3 col-sm-6">' +
+                                '<div class="card group-card shadow-sm">' +
+                                '<div class="card-body">' +
+                                '<h5 class="card-title">' + data[i]["name"] + '</h5>' +
+                                '<p class="card-text">' + data[i]["description"] + '</p>' +
+                                '<a href="javascript:void(0)" class="btn btn-quick-link join-group-btn border w-100 joinGroupBtn" data-community-id="' + data[i]["id"] + '"' + '> Katıl</a > ' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+                            $('#suggestedRow').append(cardHtml);
+                        }
+                    } else {
+                        var errHtml = '<div class="col-sm-6">' +
+                            '<h6>Önerilecek herhangi bir topluluk bulunmuyor.</h6>' +
+                            '</div>';
+                        $('#suggestedRow').append(errHtml);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error is ", xhr.responseText);
+                }
+            });
+        });
+
+        $(document).on("click", ".joinGroupBtn", function (event) {
+            event.preventDefault();
+            var communityId = $(this).data("community-id");
+            console.log("community id: ", communityId);
+
+            $.ajax({
+                contentType: "application/json",
+                type: "POST",
+                url: "/Community/JoinCommunity",
+                data: JSON.stringify({ CommunityID: communityId }),
+                success: function (response) {
+                    if (!response.validationErrors) {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: ", xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

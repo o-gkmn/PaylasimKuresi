@@ -41,7 +41,7 @@ namespace Shared.Mapper
             //CommunityUser Map
             CreateMap<CreateCommunityUserDto, CommunityUser>();
             CreateMap<UpdateCommunityUserDto, CommunityUser>();
-            CreateMap<GetCommunityUserDto, CommunityUser>();
+            CreateMap<GetCommunityUserDto, CommunityUser>().ReverseMap();
 
             //Dm Map
             CreateMap<CreateDmDto, Dm>();
