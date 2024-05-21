@@ -10,4 +10,5 @@ public class Community
 
     public virtual required User Founder { get; set; }
     public virtual required ICollection<CommunityUser> CommunityUsers { get; set; }
+    public virtual ICollection<Post>? Posts { get; set; }
 }

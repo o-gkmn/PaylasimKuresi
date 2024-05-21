@@ -40,7 +40,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">@item.Name </h5>
                                 <p class="card-text">@item.Description</p>
-                                <a href="#" class="btn btn-quick-link join-group-btn border w-100">Göz at</a>
+                                <a href="#" class="btn btn-quick-link join-group-btn border w-100 seeCommunityBtn" data-community-id="@item.ID">Göz at</a>
                             </div>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                                 '<div class="card-body">' +
                                 '<h5 class="card-title">' + data[i]["name"] + '</h5>' +
                                 '<p class="card-text">' + data[i]["description"] + '</p>' +
-                                '<a href="#" class="btn btn-quick-link join-group-btn border w-100">Göz at</a>' +
+                                '<a href="#" class="btn btn-quick-link join-group-btn border w-100 seeCommunityBtn" data-community-id="' + data[i]["id"] + '"' + '>Göz at</a>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>';
@@ -207,6 +207,11 @@
                     console.log("Error: ", xhr.responseText);
                 }
             });
+        });
+
+        $(document).on("click", ".seeCommunityBtn", function (event) {
+            var selectedid = $(this).data("community-id");
+            window.location.href = "http://localhost:5284/Home/Index?id=" + selectedid;
         });
     });
 </script>

@@ -40,7 +40,11 @@ namespace DataAccess.DbContext
                 entity.HasOne(p => p.User)
                     .WithMany(oi => oi.Posts)
                     .HasForeignKey(ip => ip.UserID)
-                    .OnDelete(DeleteBehavior.Restrict); ;
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(p => p.Community)
+                      .WithMany(oi => oi.Posts)
+                      .HasForeignKey(ip => ip.CommunityID)
+                      .OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(p => p.Comments)
                     .WithOne(oi => oi.Post)
                     .HasForeignKey(ip => ip.PostID);
@@ -68,7 +72,8 @@ namespace DataAccess.DbContext
                 entity.HasMany(p => p.CommentLikes);
                 entity.HasOne(p => p.Post)
                     .WithMany(oi => oi.Comments)
-                    .HasForeignKey(ip => ip.PostID);
+                    .HasForeignKey(ip => ip.PostID)
+                    .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(p => p.User)
                     .WithMany(oi => oi.Comments)
                     .HasForeignKey(ip => ip.UserID)

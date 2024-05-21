@@ -2,6 +2,8 @@
 <script src="/template/assets/js/jquery/jquery-3.3.1.min.js"></script>
 <script src="/template/assets/js/popper/popper.min.js"></script>
 <script src="/template/assets/js/bootstrap/bootstrap.min.js"></script>
+<script src="/template/assets/js/jquery/jquery-ui.js"></script>
+<script src="/template/assets/js/app.js"></script>
 <!-- Optional -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script type="text/javascript">
@@ -95,11 +97,25 @@
     });
 </script>
 
-<script src="/template/assets/js/bootstrap/bootstrap.min.js"></script>
+@* <script src="/template/assets/js/bootstrap/bootstrap.min.js"></script> *@
 <script>
     $(document).ready(function () {
+        function loadBootstrap(callback) {
+            if (typeof $.fn.modal === 'undefined') {
+                // Bootstrap is not loaded, load it dynamically
+                $.getScript('/template/assets/js/bootstrap/bootstrap.min.js', function() {
+                    if (callback) callback();
+                });
+            } else {
+                // Bootstrap is already loaded
+                if (callback) callback();
+            }
+        }
+
         $('#createCommunityFormBtn').on("click", function (event) {
-            $('#newCommunity').modal('show');
+            loadBootstrap(function() {
+                $('#newCommunity').modal('show');
+            });
         });
 
         $('#createCommunityBtn').on("click", function (event) {

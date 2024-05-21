@@ -1,10 +1,12 @@
 <ul class="list-unstyled" style="margin-bottom: 0;">
     <li class="media post-form w-shadow">
         <div class="media-body">
-            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            @using (Html.BeginForm("CreatePost", "Home", FormMethod.Post, new { id = "frmPst" }))
             {
                 <div class="form-group post-input">
-                    <textarea class="form-control" id="postForm" name="Content" rows="2" placeholder="Ne düşünüyorsun..."></textarea>
+                    <input type="hidden" id="communityId" name="CommunityId" value="" />
+                    <textarea class="form-control" id="postForm" name="Content" rows="2"
+                        placeholder="Ne düşünüyorsun..."></textarea>
                 </div>
                 <div class="row post-form-group">
                     <div class="col-md-9">
@@ -26,3 +28,19 @@
         </div>
     </li>
 </ul>
+
+<script>
+    $(document).ready(function () {
+        function getQueryParam(name) {
+            let url = window.location.href;
+            let urlObj = new URL(url);
+            let params = new URLSearchParams(urlObj.search);
+            return params.get(name);
+        }
+
+        $("#frmPst").submit(function (event) {
+            let selectedId = getQueryParam('id');
+            $("#communityId").val(selectedId);
+        });
+    });
+</script>

@@ -27,41 +27,41 @@ $(function () {
 });
 
 //Messenger page script
-// $(".messages").animate({
-//     scrollTop: $(document).height()
-// }, "fast");
+$(".messages").animate({
+    scrollTop: $(document).height()
+}, "fast");
 
-// $(".conv-img").click(function () {
-//     $("#status-options").toggleClass("messenger-user-active");
-// });
+$(".conv-img").click(function () {
+    $("#status-options").toggleClass("messenger-user-active");
+});
 
-// $(".expand-button").click(function () {
-//     $(".message-profile").toggleClass("expanded");
-//     $("#contacts").toggleClass("expanded");
-// });
+$(".expand-button").click(function () {
+    $(".message-profile").toggleClass("expanded");
+    $("#contacts").toggleClass("expanded");
+});
 
-// $("#status-options ul li").click(function () {
-//     $(".conv-img").removeClass();
-//     $("#status-online").removeClass("messenger-user-active");
-//     $("#status-away").removeClass("messenger-user-active");
-//     $("#status-busy").removeClass("messenger-user-active");
-//     $("#status-offline").removeClass("messenger-user-active");
-//     $(this).addClass("messenger-user-active");
+$("#status-options ul li").click(function () {
+    $(".conv-img").removeClass();
+    $("#status-online").removeClass("messenger-user-active");
+    $("#status-away").removeClass("messenger-user-active");
+    $("#status-busy").removeClass("messenger-user-active");
+    $("#status-offline").removeClass("messenger-user-active");
+    $(this).addClass("messenger-user-active");
 
-//     if ($("#status-online").hasClass("messenger-user-active")) {
-//         $(".conv-img").addClass("online");
-//     } else if ($("#status-away").hasClass("messenger-user-active")) {
-//         $(".conv-img").addClass("away");
-//     } else if ($("#status-busy").hasClass("messenger-user-active")) {
-//         $(".conv-img").addClass("busy");
-//     } else if ($("#status-offline").hasClass("messenger-user-active")) {
-//         $(".conv-img").addClass("offline");
-//     } else {
-//         $(".conv-img").removeClass();
-//     };
+    if ($("#status-online").hasClass("messenger-user-active")) {
+        $(".conv-img").addClass("online");
+    } else if ($("#status-away").hasClass("messenger-user-active")) {
+        $(".conv-img").addClass("away");
+    } else if ($("#status-busy").hasClass("messenger-user-active")) {
+        $(".conv-img").addClass("busy");
+    } else if ($("#status-offline").hasClass("messenger-user-active")) {
+        $(".conv-img").addClass("offline");
+    } else {
+        $(".conv-img").removeClass();
+    };
 
-//     $("#status-options").removeClass("messenger-user-active");
-// });
+    $("#status-options").removeClass("messenger-user-active");
+});
 
 // function newMessage() {
 //     message = $(".message-input input").val();

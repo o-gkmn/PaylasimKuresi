@@ -18,14 +18,9 @@
 
         <form class="w-25 mx-2 my-auto d-inline form-inline mr-5">
             <div class="input-group">
-                <select id="country" name="country" class="form-control w-30" 
-                style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; background-color: #e8e8e8;
+                <select class="form-control w-30 communitiesDropdown" id="communitiesDropdownId" style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; background-color: #e8e8e8;
                         border-top-right-radius: 20px; border-bottom-right-radius: 20px; font-size: .8em;
                         border: 1px solid #ccc;">
-                    <option value="usa">United States</option>
-                    <option value="canada">Canada</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="australia">Australia</option>
                 </select>
             </div>
         </form>
@@ -42,7 +37,8 @@
                         </div>
                         <div class="col-md-10">
                             <span class="fs-9">Group</span>
-                            <small id="createGroup" class="form-text text-muted">Find people with shared interests</small>
+                            <small id="createGroup" class="form-text text-muted">Find people with shared
+                                interests</small>
                         </div>
                     </div>
                 </a>
@@ -102,6 +98,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        function getQueryParam(name) {
+            let url = window.location.href;
+            let urlObj = new URL(url);
+            let params = new URLSearchParams(urlObj.search);
+            return params.get(name);
+        }
+
         function getMessage() {
             $.ajax({
                 contentType: "application/json",
@@ -110,7 +113,7 @@
                 success: function (response) {
                     var senders = response["mappedDmsSender"];
                     var dms = response["dms"];
-
+                    console.log("GetMessage requeset return success with : ", response);
                     for (var i = 0; i < dms.length; i++) {
                         var msgHtml = '<li>' +
                             '<div class="col-md-3 col-sm-3 col-xs-3">' +
@@ -142,5 +145,37 @@
             $('.drop-content').html('');
             getMessage();
         });
+
+        $(document).on("focus", ".communitiesDropdown", function (event) {
+            $.ajax({
+                contentType: "application/json",
+                method: "get",
+                url: "/Community/GetAllParticipatedCommunities",
+                success: function (response) {
+                    var data = response["participatedCommunities"];
+                    $('#communitiesDropdownId').empty();
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var dataHtml = '<option value="' + data[i]["id"] + '">' + data[i]["name"] + '</option>'
+                            $('#communitiesDropdownId').append(dataHtml);
+                        }
+
+                        let selectedId = getQueryParam('id');
+                        console.log(selectedId);
+                        $('#communitiesDropdownId').val(selectedId);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error is", xhr.responseText);
+                }
+            });
+        });
+
+        $(document).on("change", ".communitiesDropdown", function (event) {
+            var selectedid = $(this).val();
+            window.location.href = "http://localhost:5284/Home/Index?id=" + selectedid;
+        });
+
+
     });
 </script>

@@ -1,5 +1,6 @@
 using Business.PaylasimKuresi.Interfaces.PostServices;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs.PostDTOs;
 
 namespace PaylasimKuresi.ViewComponents.Home;
 
@@ -12,9 +13,15 @@ public class _PostFlowViewComponent : ViewComponent
         _postService = postService;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(Guid? communityId)
     {
-        var postDtoList = await _postService.GetListAsync();
+        List<GetPostDto> postDtoList;
+
+        if (communityId == null)
+            postDtoList = await _postService.GetListAsync();
+        else
+            postDtoList = await _postService.GetListAsync(p => p.CommunityID == communityId);
+
         postDtoList = [.. postDtoList.OrderByDescending(x => x.CreatedAt)];
         return View(postDtoList);
     }

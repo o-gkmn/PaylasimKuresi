@@ -20,7 +20,7 @@ public class Post
     public DateTime CreatedAt { get; set; }
 
     public virtual required User User { get; set; }
-    //public required Community Community { get; set; }
+    public virtual Community? Community { get; set; }
 
     public virtual ICollection<Comment>? Comments { get; set; }
     public virtual required ICollection<PostLike> UsersWhoLike { get; set; }
