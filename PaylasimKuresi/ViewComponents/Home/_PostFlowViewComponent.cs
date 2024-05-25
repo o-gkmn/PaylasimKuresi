@@ -13,15 +13,11 @@ public class _PostFlowViewComponent : ViewComponent
         _postService = postService;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(Guid? communityId)
+    public async Task<IViewComponentResult> InvokeAsync(Guid userId)
     {
         List<GetPostDto> postDtoList;
 
-        if (communityId == null)
-            postDtoList = await _postService.GetListAsync();
-        else
-            postDtoList = await _postService.GetListAsync(p => p.CommunityID == communityId);
-
+        postDtoList = await _postService.GetListAsync(p => p.UserID == userId);
         postDtoList = [.. postDtoList.OrderByDescending(x => x.CreatedAt)];
         return View(postDtoList);
     }

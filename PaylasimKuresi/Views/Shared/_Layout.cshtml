@@ -11,7 +11,7 @@
     @await Component.InvokeAsync("_Navbar")
 
     <div class="row newsfeed-right-side-content mt-3">
-        @await Html.PartialAsync("/Views/LayoutPartial/_SidebarPartial.cshtml")
+        @await Component.InvokeAsync("_Sidebar")
         @RenderBody()
     </div>
 

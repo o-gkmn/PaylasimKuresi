@@ -38,9 +38,41 @@ public class UserService : IUserService
         if (user.Identity.Name is null)
             return null;
 
-        var result = await _userRepository.FindUserByUserNameAsync(user.Identity.Name);
+        var result = await _userRepository.GetAsync(u => u.UserName == user.Identity.Name);
 
         var userDto = _mapper.Map<GetUserDto>(result);
         return userDto;
+    }
+
+    public async Task<GetUserDto?> UpdateAsync(UpdateUserDto updateUserDto)
+    {
+        var mappedUser = _mapper.Map<User>(updateUserDto);
+        var result = await _userRepository.UpdateAsync(mappedUser);
+
+        if (result.Succeeded)
+        {
+            var getUserDto = _mapper.Map<GetUserDto>(mappedUser);
+            return getUserDto;
+        }
+
+        return null;
+    }
+
+    public async Task<GetUserDto?> UpdateProfilePicture(UpdateProfilePictureUserDto updateProfilePictureUserDto)
+    {
+        var user = await _userRepository.GetAsync(u => u.Id == updateProfilePictureUserDto.Id);
+        if (user == null)
+            return null;
+
+        user.ProfilePictureUrl = updateProfilePictureUserDto.ProfilePictureUrl;
+        var result = await _userRepository.UpdateAsync(user);
+
+        if (result.Succeeded)
+        {
+            var getUserDto = _mapper.Map<GetUserDto>(user);
+            return getUserDto;
+        }
+
+        return null;
     }
 }

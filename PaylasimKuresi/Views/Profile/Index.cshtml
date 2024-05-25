@@ -1,0 +1,120 @@
+@model GetUserDto
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_ProfileLayout.cshtml";
+    var authUser = ViewBag.AuthUser as GetUserDto;
+}
+
+<div class="row profile-right-side-content">
+    <div class="user-profile">
+        <div class="row profile-rows">
+            <div class="col-md-3">
+                <div class="profile-info-left" style="top: 20; width: max-content;">
+                    <div class="text-center">
+                        <div class="profile-img w-shadow">
+                            <div class="profile-img-overlay"></div>
+                            <img src="@Model.ProfilePictureUrl" alt="Avatar" class="avatar img-circle">
+                            @{
+                                if (authUser.Id == Model.Id)
+                                {
+                                    <div class="profile-img-caption">
+                                        <label for="updateProfilePic" class="upload">
+                                            <i class='bx bxs-camera'></i> Güncelle
+                                            <input type="file" id="updateProfilePicInput" class="text-center upload">
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <p class="profile-fullname mt-3">@Model.FirstName @Model.LastName</p>
+                        <p class="profile-username mb-3 text-muted">@@@Model.UserName</p>
+                    </div>
+                    <div class="intro mt-4">
+                        <div class="d-flex">
+                            @{
+                                if (Model.Followers.Any(f => f.FollowingPersonID == authUser.Id))
+                                {
+                                    <button type="button" class="btn btn-follow mr-3"
+                                        style="color: #fff; background-color: #007bff;"><i class='bx bx-check'
+                                            style="color: #fff;"></i>
+                                        Takip Ediliyor</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-follow mr-3"><i class='bx bx-plus'></i>
+                                        Takip Et</button>
+                                }
+                            }
+                            <button type="button" class="btn btn-start-chat" data-toggle="modal"
+                                id="createNewMessageBtn" data-target="#msgModel"><i class='bx bxs-message-rounded'></i>
+                                <span class="fs-8">Mesaj Gönder</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 p-0">
+                <div class="profile-info-right">
+                    <!-- Posts section -->
+                    <div class="row">
+                        <div class="col-md-9 profile-center">
+                            <ul class="list-inline profile-links d-flex justify-content-between w-shadow rounded">
+                                <li class="list-inline-item profile-active">
+                                    <a href="#">Gönderiler</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="friends.html">Arkadaşlar</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="friends.html">Topluluklar</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="friends.html">Beğeniler</a>
+                                </li>
+                            </ul>
+
+                            @{
+                                if (authUser.Id == Model.Id)
+                                {
+                                    @await Component.InvokeAsync("_PostComposerBox")
+                                }
+                            }
+
+                            @await Component.InvokeAsync("_PostFlow", new { userId = @Model.Id })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- New message modal -->
+<div class="modal fade" id="msgModel" tabindex="-1" role="dialog" aria-labelledby="msgModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header new-msg-header">
+                <h5 class="modal-title" id="newMessageModalLabel">Yeni sohbet başlat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body new-msg-body">
+                <form action="" method="" class="new-msg-form">
+                    <div class="form-group">
+                        <input type="hidden" value="Send" name="Status">
+                        <input type="hidden" value=@Model.UserName name="ReceiverUserName">
+                        <label for="message-text" class="col-form-label">Mesaj:</label>
+                        <textarea class="form-control search-input" rows="5" id="message-text" name="Content"
+                            placeholder="Bir mesaj yazın..."></textarea>
+                    </div>
+                    <div class="modal-footer new-msg-footer" style="display: flex; justify-content: space-between">
+                        <span id="errorMessage" style="display: inline-block;"></span>
+                        <button type="submit" class="btn btn-primary btn-sm" id="sendMessageBtn">Gönder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

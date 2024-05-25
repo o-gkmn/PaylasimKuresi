@@ -9,4 +9,6 @@ public interface IUserService
 {
     Task<GetUserDto?> RetrieveUserByPrincipalAsync(ClaimsPrincipal user);
     Task<GetUserDto?> GetAsync(Expression<Func<GetUserDto, bool>> filter);
+    Task<GetUserDto?> UpdateAsync(UpdateUserDto updateUserDto);
+    Task<GetUserDto?> UpdateProfilePicture(UpdateProfilePictureUserDto updateProfilePictureUserDto);
 }

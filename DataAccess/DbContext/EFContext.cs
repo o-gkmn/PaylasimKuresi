@@ -118,14 +118,16 @@ namespace DataAccess.DbContext
 
             modelBuilder.Entity<Follow>(entity =>
             {
+                entity.HasIndex(e => new { e.FollowingPersonID, e.FollowedPersonID })
+                    .IsUnique();
                 entity.HasOne(p => p.FollowingPerson)
                     .WithMany(oi => oi.Following)
                     .HasForeignKey(ip => ip.FollowingPersonID)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(p => p.FollowedPerson)
                     .WithMany(oi => oi.Followers)
                     .HasForeignKey(ip => ip.FollowedPersonID)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Group>(entity =>

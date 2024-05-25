@@ -1,0 +1,13 @@
+<html>
+@await Html.PartialAsync("/Views/ProfileLayoutPartial/_HeadPartial.cshtml")
+
+<body>
+
+    @await Component.InvokeAsync("_Navbar")
+
+    @RenderBody()
+
+    @await Html.PartialAsync("/Views/ProfileLayoutPartial/_ScriptPartial.cshtml")
+</body>
+
+</html>

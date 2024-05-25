@@ -26,7 +26,16 @@ namespace DataAccess.Repositories.CommonOperations
         {
             try
             {
-                _dbContext.Remove(entity);
+
+                foreach (var entry in _dbContext.ChangeTracker.Entries())
+                {
+                    var e = entry.Entity;
+                    var state = entry.State;
+
+                    Console.WriteLine($"Entity Type: {e.GetType().Name}, State: {state}");
+                }
+                _dbContext.Entry<T>(entity).State = EntityState.Modified;
+                _dbContext.Set<T>().Remove(entity);
                 var rowsAffected = await _dbContext.SaveChangesAsync();
                 return rowsAffected > 0;
             }
@@ -39,6 +48,7 @@ namespace DataAccess.Repositories.CommonOperations
         public async Task<T?> GetAsync(Expression<Func<T, bool>> filter)
         {
             var result = await _dbContext.Set<T>()
+                .AsNoTracking()
                 //IncludeAllEntities(filter)
                 .FirstOrDefaultAsync(filter);
 
@@ -49,12 +59,14 @@ namespace DataAccess.Repositories.CommonOperations
         {
             if (filter == null)
                 return await _dbContext.Set<T>()
+                    .AsNoTracking()
                     //IncludeAllEntities()
                     .ToListAsync();
             else
                 return await _dbContext.Set<T>()
                     //IncludeAllEntities(filter)
                     .Where(filter)
+                    .AsNoTracking()
                     .ToListAsync();
         }
 

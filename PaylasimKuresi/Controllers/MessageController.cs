@@ -48,7 +48,7 @@ public class MessageController : Controller
         if (ModelState.IsValid)
         {
             var result = await _dmService.CreateAsync(createDmDto);
-            return RedirectToAction("Index", "Message");
+            return Json(new { validationErrors = false });
         }
         else
         {

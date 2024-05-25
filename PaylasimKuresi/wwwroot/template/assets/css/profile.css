@@ -27,8 +27,9 @@
 }
 
 .profile-info-left {
-    position: relative;
-    top: -92px;
+    position: absolute;
+    top: 20px;
+    transition: top 0.3s ease;
 }
 
 .cover-overlay {

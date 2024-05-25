@@ -1,0 +1,191 @@
+<!-- Core -->
+<script src="/template/assets/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/template/assets/js/popper/popper.min.js"></script>
+<script src="/template/assets/js/bootstrap/bootstrap.min.js"></script>
+<script src="/template/assets/js/jquery/jquery-ui.js"></script>
+<!-- Optional -->
+<script src="/template/assets/js/app.js"></script>
+<script src="/template/assets/js/components/components.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var $item = $('.profile-info-left');
+
+        $(window).scroll(function () {
+            var newPosition = 50 + $(window).scrollTop() + 'px'; // Adjust this value as needed
+            $item.css('top', newPosition);
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.show-comments', function () {
+            var itemId = $(this).data('item-id');
+            var comments = $('.hide-comments[data-item-id="' + itemId + '"]');
+            comments.slideToggle("slow");
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".comment-like-button").on("click", function (event) {
+            event.preventDefault();
+
+            var commentId = $(this).data("comment-id");
+            var clickedButton = $(this);
+
+            $(this).off("click");
+
+            $.ajax({
+                contentType: "application/json",
+                dataType: "json",
+                type: "post",
+                url: "/Home/LikeComment",
+                data: JSON.stringify({
+                    CommentID: commentId
+                }),
+                success: function (response) {
+                    clickedButton.css("color", "rgb(2, 132, 254)")
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error sending comment ID:", error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        function getQueryParam(name) {
+            let url = window.location.href;
+            let urlObj = new URL(url);
+            let params = new URLSearchParams(urlObj.search);
+            return params.get(name);
+        }
+
+        $(".btn-follow").on("click", function (event) {
+            let selectedId = getQueryParam('id');
+            console.log("Clicked");
+            $.ajax({
+                contentType: "application/json",
+                dataType: "json",
+                type: "post",
+                url: "/Profile/FollowPerson",
+                data: JSON.stringify({ FollowedPersonID: selectedId.toString() }),
+                success: function (response) {
+                    console.log(response)
+                    if (response.result == true) {
+                        console.log(response.href);
+                        location.href = response.href;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error is ", xhr.responseText);
+                }
+
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        function loadBootstrap(callback) {
+            if (typeof $.fn.modal === 'undefined') {
+                // Bootstrap is not loaded, load it dynamically
+                $.getScript('/template/assets/js/bootstrap/bootstrap.min.js', function () {
+                    if (callback) callback();
+                });
+            } else {
+                // Bootstrap is already loaded
+                if (callback) callback();
+            }
+        }
+
+        $('#createNewMessageBtn').on("click", function (event) {
+            event.preventDefault();
+            loadBootstrap(function () {
+                $('#msgModel').modal('show');
+            });
+        });
+
+        $('.new-msg-form').submit(function (e) {
+            e.preventDefault();
+
+            var formDataArray = $(this).serializeArray();
+            var jsonObject = {};
+            formDataArray.forEach(function (item) {
+                jsonObject[item.name] = item.value;
+            });
+
+            console.log("Submitted");
+
+            $.ajax({
+                contentType: "application/json",
+                dataType: "json",
+                type: "post",
+                url: "/Message/CreateNewConversation",
+                data: JSON.stringify(jsonObject),
+                success: function (response) {
+                    if (response.validationErrors) {
+                        console.log("Response with error");
+                        var modalTitleText = $('#errorMessage').text(response.errorMessage);
+                    } else {
+                        console.log("Response without error");
+                        $('#msgModel').modal('hide');
+                        $('#msgModel').on('hidden.bs.modal', function () {
+                            $('.modal-backdrop').remove();
+                        });
+                        $('#message-text').val("");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#updateProfilePicInput').on('change', function (e) {
+            var fileInput = $(this)[0];
+
+            if (fileInput.files.length === 0) {
+                alert("Please select a file.");
+                return;
+            }
+
+            var file = fileInput.files[0];
+
+            console.log('Selected file:', file.name);
+
+            var formData = new FormData();
+            formData.append('profilePicture', fileInput.files[0]);
+
+            $.ajax({
+                contentType: false,
+                dataType: "json",
+                processData: false,
+                type: 'POST',
+                url: '/Profile/UploadProfilePicture',
+                data: formData,
+                success: function (response) {
+                    console.log(response);
+                    if (response.result == true) {
+                        console.log(response.href);
+                        location.href = response.href;
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown);
+                }
+            });
+        });
+    });
+</script>

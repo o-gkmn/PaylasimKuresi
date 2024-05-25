@@ -59,16 +59,16 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetAsync(Expression<Func<User, bool>> filter)
     {
-        var entity = await _context.Users.FirstOrDefaultAsync(filter);
+        var entity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(filter);
         return entity ?? null;
     }
 
     public async Task<List<User>> GetListAsync(Expression<Func<User, bool>>? filter = null)
     {
         if (filter == null)
-            return await _context.Users.ToListAsync();
+            return await _context.Users.AsNoTracking().ToListAsync();
         else
-            return await _context.Users.Where(filter).ToListAsync();
+            return await _context.Users.AsNoTracking().Where(filter).ToListAsync();
     }
 
     public Task<User> CreateAsync(User entity)
@@ -78,6 +78,15 @@ public class UserRepository : IUserRepository
 
     public async Task<IdentityResult> UpdateAsync(User entity)
     {
+        foreach (var entry in _context.ChangeTracker.Entries())
+        {
+            var e = entry.Entity;
+            var state = entry.State;
+
+            Console.WriteLine($"Entity Type: {e.GetType().Name}, State: {state}");
+        }
+
+        _context.Entry(entity).State = EntityState.Modified;
         var result = await _userManager.UpdateAsync(entity);
         return result;
     }
