@@ -1,5 +1,6 @@
 using Business.PaylasimKuresi.Interfaces.DmServices;
 using Business.PaylasimKuresi.Interfaces.UserServices;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Models.Errors;
 

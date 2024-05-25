@@ -1,13 +1,16 @@
 using AutoMapper;
 using Business.PaylasimKuresi.Interfaces.DmServices;
 using Business.PaylasimKuresi.Interfaces.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.DmDTOs;
 using Models.DTOs.UserDTOs;
 
 namespace PaylasimKuresi.Controllers;
 
+
 [Route("[controller]")]
+[Authorize]
 public class MessageController : Controller
 {
     private readonly IUserService _userService;
@@ -32,9 +35,8 @@ public class MessageController : Controller
     public async Task<IActionResult> CreateNewConversation([FromBody] CreateDmDto createDmDto)
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
-        //TODO: BURAYA KULLANICI OTURUMU SONLANDIRMA KODLARI GELECEK
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var receiverUser = await _userService.GetAsync(u => u.UserName == createDmDto.ReceiverUserName);
         if (receiverUser == null)
@@ -80,7 +82,7 @@ public class MessageController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         createDmDto.SenderID = user.Id;
         createDmDto.Status = "Send";
@@ -100,7 +102,7 @@ public class MessageController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var dms = await _dmService.GetListAsync(dm => dm.ReceiverID == user.Id);
         var dmsSender = dms.OrderByDescending(dm => dm.SentAt)

@@ -1,13 +1,12 @@
 using AutoMapper;
 using Business.PaylasimKuresi.Interfaces.FollowServices;
 using Business.PaylasimKuresi.Interfaces.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTOs.CommunityDTOs;
 using Models.DTOs.CommunityUserDTOs;
 using Models.DTOs.FollowDTOs;
 using Models.DTOs.PostLikeDTOs;
 using Models.DTOs.UserDTOs;
-using Models.Entities;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
@@ -15,6 +14,7 @@ using SixLabors.ImageSharp.Processing;
 namespace PaylasimKuresi.Controllers;
 
 [Route("[controller]")]
+[Authorize]
 public class ProfileController : Controller
 {
     private readonly IUserService _userService;
@@ -33,7 +33,7 @@ public class ProfileController : Controller
     {
         var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
         if (authUser == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var uuid = Guid.Parse(id);
         var user = await _userService.GetAsync(u => u.Id == uuid);
@@ -52,7 +52,7 @@ public class ProfileController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         createFollowDto.FollowingPersonID = user.Id;
         createFollowDto.FollowedAt = DateTime.UtcNow;
@@ -90,7 +90,7 @@ public class ProfileController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         if (profilePicture == null || profilePicture.Length == 0)
         {
@@ -150,7 +150,7 @@ public class ProfileController : Controller
     {
         var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
         if (authUser == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var uuid = Guid.Parse(userId);
         var user = await _userService.GetAsync(u => u.Id == uuid);
@@ -168,7 +168,7 @@ public class ProfileController : Controller
     {
         var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
         if (authUser == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var uuid = Guid.Parse(userId);
         var user = await _userService.GetAsync(u => u.Id == uuid);
@@ -186,7 +186,7 @@ public class ProfileController : Controller
     {
         var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
         if (authUser == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var uuid = Guid.Parse(id);
         var user = await _userService.GetAsync(u => u.Id == uuid);

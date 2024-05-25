@@ -1,7 +1,7 @@
 using Business.PaylasimKuresi.Interfaces.CommunityServices;
 using Business.PaylasimKuresi.Interfaces.CommunityUserServices;
-using Business.PaylasimKuresi.Interfaces.RoleServices;
 using Business.PaylasimKuresi.Interfaces.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.CommunityDTOs;
 using Models.DTOs.CommunityUserDTOs;
@@ -9,6 +9,7 @@ using Models.DTOs.CommunityUserDTOs;
 namespace PaylasimKuresi.Controllers;
 
 [Route("[controller]")]
+[Authorize]
 public class CommunityController : Controller
 {
     private readonly ICommunityService _communityService;
@@ -26,7 +27,7 @@ public class CommunityController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var participatedCommunities = await _communityService.GetListAsync(
             c => c.CommunityUsers.Any(communityUser => communityUser.Member.Id == user.Id));
@@ -48,7 +49,7 @@ public class CommunityController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         createCommunityDto.FounderID = user.Id;
         createCommunityDto.CreatedAt = DateTime.Now;
@@ -80,7 +81,7 @@ public class CommunityController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var participatedCommunities = await _communityService.GetListAsync(
             c => c.CommunityUsers.Any(communityUser => communityUser.Member.Id == user.Id));
@@ -98,7 +99,7 @@ public class CommunityController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         var suggestedCommunities = await _communityService.GetListAsync(
             c => !c.CommunityUsers.Any(communityUser => communityUser.Member.Id == user.Id));
@@ -116,7 +117,7 @@ public class CommunityController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         createCommunityUserDto.UserID = user.Id;
         createCommunityUserDto.JoinedAt = DateTime.UtcNow;

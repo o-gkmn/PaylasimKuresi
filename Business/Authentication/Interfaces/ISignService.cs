@@ -6,4 +6,5 @@ public interface ISignService
 {
     Task<bool> SignInAsync(SignInUserDto signInDto);
     Task<bool> SignUpAsync(CreateUserDto createUserDto);
+    Task SignOutAsync();
 }

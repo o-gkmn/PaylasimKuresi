@@ -7,15 +7,14 @@ namespace PaylasimKuresi.Controllers;
 [Route("[controller]")]
 public class SignInController : Controller
 {
-    private readonly ISignService _signService;
     private readonly ISignService _authenticationService;
 
-    public SignInController(ISignService signService, ISignService authenticationService)
+    public SignInController(ISignService authenticationService)
     {
-        _signService = signService;
         _authenticationService = authenticationService;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
         return View();
@@ -33,5 +32,20 @@ public class SignInController : Controller
                 ModelState.AddModelError(nameof(SignInUserDto.ErrorMessage), "Üzgünüz, şifreniz yanlıştı. Lütfen şifrenizi iki kez kontrol edin.");
         }
         return View(signInUserDto);
+    }
+
+    [Route("LogOut")]
+    [HttpGet]
+    public async Task<IActionResult> LogOut()
+    {
+        await _authenticationService.SignOutAsync();
+        return RedirectToAction("Index", "SignIn");
+    }
+
+    [Route("AccessDenied")]
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 }

@@ -151,10 +151,10 @@ public static class ServiceExtensions
         services.ConfigureApplicationCookie(option =>
             {
                 option.LoginPath = "/SignIn/";
-                option.LogoutPath = "/account/logout";
-                option.AccessDeniedPath = "/account/accessdenied";
+                option.LogoutPath = "/SignIn/LogOut";
+                option.AccessDeniedPath = "/SignIn/AccessDenied";
                 option.SlidingExpiration = true;
-                option.ExpireTimeSpan = TimeSpan.FromMinutes(36);
+                option.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 
                 option.Cookie = new CookieBuilder
                 {

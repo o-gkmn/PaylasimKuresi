@@ -18,8 +18,8 @@ using Models.DTOs.TextPostDTOs;
 
 namespace PaylasimKuresi.Controllers;
 
-[Route("[controller]")]
 [Authorize]
+[Route("[controller]")]
 public class HomeController : Controller
 {
     private readonly ITextPostService _textPostService;
@@ -54,7 +54,7 @@ public class HomeController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         List<GetPostDto> postDtoList;
         Guid communityId;
@@ -82,7 +82,7 @@ public class HomeController : Controller
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
 
         GetCommunityDto? community;
         if (createTextPostDto.CommunityId == Guid.Empty)
@@ -147,9 +147,8 @@ public class HomeController : Controller
     public async Task<IActionResult> SendComment(CreateCommentDto createCommentDto)
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
-        //TODO: BURAYA KULLANICI OTURUMU SONLANDIRMA KODLARI GELECEK
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
         createCommentDto.SentAt = DateTime.Now;
         createCommentDto.UserID = user.Id;
 
@@ -169,9 +168,8 @@ public class HomeController : Controller
     public async Task<IActionResult> LikePost([FromBody] CreatePostLikeDto createPostLikeDto)
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
-        //TODO: BURAYA KULLANICI OTURUMU SONLANDIRMA KODLARI GELECEK
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
         createPostLikeDto.LikedAt = DateTime.Now;
         createPostLikeDto.UserID = user.Id;
 
@@ -194,9 +192,8 @@ public class HomeController : Controller
     public async Task<IActionResult> LikeComment([FromBody] CreateCommentLikeDto createCommentLikeDto)
     {
         var user = await _userService.RetrieveUserByPrincipalAsync(User);
-        //TODO: BURAYA KULLANICI OTURUMU SONLANDIRMA KODLARI GELECEK
         if (user == null)
-            return RedirectToAction("Index", "SignIn");
+            return RedirectToAction("Index", "LogOut");
         createCommentLikeDto.LikedAt = DateTime.Now;
         createCommentLikeDto.UserID = user.Id;
 
