@@ -6,7 +6,6 @@
 <!-- Optional -->
 <script src="/template/assets/js/app.js"></script>
 <script src="/template/assets/js/components/components.js"></script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -61,10 +60,11 @@
 <script>
     $(document).ready(function () {
         function getQueryParam(name) {
-            let url = window.location.href;
-            let urlObj = new URL(url);
-            let params = new URLSearchParams(urlObj.search);
-            return params.get(name);
+            var path = window.location.pathname;
+            var parts = path.split('/');
+            var id = parts.pop();
+            console.log('ID:', id);
+            return id;
         }
 
         $(".btn-follow").on("click", function (event) {
@@ -96,12 +96,10 @@
     $(document).ready(function () {
         function loadBootstrap(callback) {
             if (typeof $.fn.modal === 'undefined') {
-                // Bootstrap is not loaded, load it dynamically
                 $.getScript('/template/assets/js/bootstrap/bootstrap.min.js', function () {
                     if (callback) callback();
                 });
             } else {
-                // Bootstrap is already loaded
                 if (callback) callback();
             }
         }

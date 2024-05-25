@@ -1,0 +1,70 @@
+@model GetUserDto
+
+@{
+    ViewData["Title"] = "GetCommunities";
+    Layout = "/Views/Shared/_ProfileLayout.cshtml";
+    var communities = ViewBag.Communities as ICollection<GetCommunityUserDto>;
+}
+
+<div class="row profile-right-side-content">
+    <div class="user-profile">
+        <div class="row profile-rows">
+            @await Component.InvokeAsync("_ProfileSidebar", new { user = Model })
+            <div class="col-md-9 p-0">
+                <div class="profile-info-right">
+                    <div class="row">
+                        <div class="col-md-9 profile-center">
+                            <ul class="list-inline profile-links d-flex justify-content-between w-shadow rounded">
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Index/@Model.Id">Gönderiler</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Following/@Model.Id">Arkadaşlar</a>
+                                </li>
+                                <li class="list-inline-item profile-active">
+                                    <a href="#">Topluluklar</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="/Profile/LikedPosts/@Model.Id">Beğeniler</a>
+                                </li>
+                            </ul>
+
+                            <div class="groups bg-white py-3 px-4 shadow-sm">
+                                <div class="card-head d-flex justify-content-between">
+                                    <h5 class="mb-4">Toplulukların</h5>
+                                </div>
+                                <div class="row" id="participatedRow">
+                                    @if (communities.Count == 0)
+                                    {
+                                        <div class="col-sm-6">
+                                            <h6>Herhangi bir topluluk bulunmuyor.</h6>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var item in communities)
+                                        {
+                                            <div class="col-md-3 col-sm-6">
+                                                <div class="card group-card shadow-sm">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">@item.Community.Name </h5>
+                                                        <p class="card-text">@item.Community.Description</p>
+                                                        <a href="/Home/Index?id=@item.Community.ID"
+                                                            class="btn btn-quick-link join-group-btn border w-100 seeCommunityBtn"
+                                                            data-community-id="@item.Community.ID">Göz at</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

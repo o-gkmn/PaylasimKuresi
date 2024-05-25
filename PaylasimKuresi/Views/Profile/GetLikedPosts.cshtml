@@ -1,0 +1,40 @@
+@model GetUserDto
+
+@{
+    ViewData["Title"] = "GetLikedPosts";
+    Layout = "/Views/Shared/_ProfileLayout.cshtml";
+    var likedPosts = ViewBag.UserLikedPosts as ICollection<GetPostLikeDto>;
+}
+
+<div class="row profile-right-side-content">
+    <div class="user-profile">
+        <div class="row profile-rows">
+            @await Component.InvokeAsync("_ProfileSidebar", new { user = Model })
+            <div class="col-md-9 p-0">
+                <div class="profile-info-right">
+                    <div class="row">
+                        <div class="col-md-9 profile-center">
+                            <ul class="list-inline profile-links d-flex justify-content-between w-shadow rounded">
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Index/@Model.Id">Gönderiler</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Following/@Model.Id">Arkadaşlar</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Communities/@Model.Id">Topluluklar</a>
+                                </li>
+                                <li class="list-inline-item profile-active">
+                                    <a href="#">Beğeniler</a>
+                                </li>
+                            </ul>
+
+                            @await Component.InvokeAsync("_PostFlow", new { userId = @Model.Id, needLikedPosts = true })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

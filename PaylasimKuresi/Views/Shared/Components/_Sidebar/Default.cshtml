@@ -1,4 +1,5 @@
 @model GetUserDto
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 <div class="col-md-2 newsfeed-left-side sticky-top shadow-sm" id="sidebar-wrapper">
     <div class="card newsfeed-user-card h-100">
@@ -7,41 +8,31 @@
                 <h6>Ana Sayfa</h6>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center sd-active">
-                <a href="/Home/Index" class="sidebar-item"><img src="/template/assets/images/icons/left-sidebar/newsfeed.png"
-                        alt="newsfeed"> Akış</a>
-                <a href="#" class="newsfeedListicon"><i class='bx bx-dots-horizontal-rounded'></i></a>
+                <a href="/Home/Index" class="sidebar-item"><i class='bx bxs-home-alt-2 text-primary'></i> Akış</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="/Message/" class="sidebar-item"><img src="/template/assets/images/icons/left-sidebar/message.png"
-                        alt="message"> Mesajlar</a>
+                <a href="/Message/" class="sidebar-item"><i class='bx bxs-chat text-primary'></i> Mesajlar</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="/Community" class="sidebar-item"><img src="/template/assets/images/icons/left-sidebar/group.png"
-                        alt="group"> Topluluklar</a>
+                <a href="/Community" class="sidebar-item"><i class='bx bxs-book-content text-primary'></i>
+                    Topluluklar</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="events.html" class="sidebar-item"><img src="/template/assets/images/icons/left-sidebar/event.png"
-                        alt="event"> Etkinlikler</a>
-                <span class="badge badge-primary badge-pill">3</span>
+                <a href="/Profile/Following/@Model.Id" class="sidebar-item"><i class='bx bxs-group text-primary'></i>
+                    Arkadaşlar</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="saved.html" class="sidebar-item"><img src="/template/assets/images/icons/left-sidebar/saved.png"
-                        alt="saved"> Kaydedildi</a>
-                <span class="badge badge-primary badge-pill">8</span>
+                <a href="/Profile/Communities/@Model.Id" class="sidebar-item"><i
+                        class='bx bxs-megaphone text-primary'></i> Katıldığım
+                    Topluluklar </a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="find-friends.html" class="sidebar-item"><img
-                        src="/template/assets/images/icons/left-sidebar/find-friends.png" alt="find-friends"> Arkadaşlarını bul</a>
-                <span class="badge badge-primary badge-pill"><i class='bx bx-chevron-right'></i></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="matches.html" class="sidebar-item"><img src="/template/assets/images/icons/left-sidebar/matches.png"
-                        alt="matches"> Eşleşmeler</a>
-                <span class="badge badge-primary badge-pill"><i class='bx bx-chevron-right'></i></span>
+                <a href="/Profile/LikedPosts/@Model.Id" class="sidebar-item"><i class='bx bxs-like text-primary'></i>
+                    Beğeniler </a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center newsLink">
-                <a href="/Profile/Index?id=@Model.Id" class="sidebar-item"><i
-                        class='bx bx-user text-primary'></i> Profil </a>
+                <a href="/Profile/Index/@Model.Id" class="sidebar-item"><i class='bx bxs-user text-primary'></i> Profil
+                </a>
                 <span class="badge badge-primary badge-pill"></span>
             </li>
         </ul>

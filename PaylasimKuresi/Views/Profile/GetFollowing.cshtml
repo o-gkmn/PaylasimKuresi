@@ -1,0 +1,64 @@
+@model GetUserDto
+
+@{
+    ViewData["Title"] = "GetFollowing";
+    Layout = "/Views/Shared/_ProfileLayout.cshtml";
+    var following = ViewBag.Following as ICollection<GetFollowDto>;
+}
+
+<div class="row profile-right-side-content">
+    <div class="user-profile">
+        <div class="row profile-rows">
+            @await Component.InvokeAsync("_ProfileSidebar", new { user = Model })
+            <div class="col-md-9 p-0">
+                <div class="profile-info-right">
+                    <div class="row">
+                        <div class="col-md-9 profile-center">
+                            <ul class="list-inline profile-links d-flex justify-content-between w-shadow rounded">
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Index/@Model.Id">Gönderiler</a>
+                                </li>
+                                <li class="list-inline-item profile-active">
+                                    <a href="#">Arkadaşlar</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="/Profile/Communities/@Model.Id">Topluluklar</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="/Profile/LikedPosts/@Model.Id">Beğeniler</a>
+                                </li>
+                            </ul>
+
+                            <div class="bg-white py-3 px-4 shadow-sm">
+                                <div class="card-head d-flex justify-content-between">
+                                    <h5 class="mb-4">Arkadaşlar</h5>
+                                </div>
+                                <div class="row">
+                                    @foreach (var item in following)
+                                    {
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="card group-card shadow-sm">
+                                                <img src="@item.FollowedPerson.ProfilePictureUrl"
+                                                    class="card-img-top group-card-image" alt="Group image">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">@item.FollowedPerson.FirstName
+                                                        @item.FollowedPerson.LastName
+                                                    </h5>
+                                                    <div class="btn-group w-100" role="group">
+                                                        <a href="/Profile/Index/@item.FollowedPersonID"
+                                                            class="btn btn-quick-link join-group-btn border w-100">Profile
+                                                            Git</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

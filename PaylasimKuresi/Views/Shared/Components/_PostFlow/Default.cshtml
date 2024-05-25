@@ -1,7 +1,7 @@
 @model List<GetPostDto>
 
 @{
-    var userLikedPost = ViewBag.UserLikedPosts as ICollection<Models.Entities.PostLike>;
+    var userLikedPost = ViewBag.UserLikedPosts as ICollection<GetPostLikeDto>;
 }
 
 <div class="posts-section mb-5">

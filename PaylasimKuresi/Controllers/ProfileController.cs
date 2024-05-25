@@ -2,8 +2,12 @@ using AutoMapper;
 using Business.PaylasimKuresi.Interfaces.FollowServices;
 using Business.PaylasimKuresi.Interfaces.UserServices;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs.CommunityDTOs;
+using Models.DTOs.CommunityUserDTOs;
 using Models.DTOs.FollowDTOs;
+using Models.DTOs.PostLikeDTOs;
 using Models.DTOs.UserDTOs;
+using Models.Entities;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
@@ -24,8 +28,7 @@ public class ProfileController : Controller
         _mapper = mapper;
     }
 
-    [Route("Index")]
-    [HttpGet("{id}")]
+    [HttpGet("Index/{id}")]
     public async Task<IActionResult> Index(string id)
     {
         var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
@@ -142,16 +145,57 @@ public class ProfileController : Controller
         return new JsonResult(new { result = false });
     }
 
-    [Route("Following")]
-    [HttpGet()]
-    public async Task<IActionResult> GetFollowingAsync([FromQuery] string id)
+    [HttpGet("Following/{userId}")]
+    public async Task<IActionResult> GetFollowing(string userId)
     {
+        var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
+        if (authUser == null)
+            return RedirectToAction("Index", "SignIn");
+
+        var uuid = Guid.Parse(userId);
+        var user = await _userService.GetAsync(u => u.Id == uuid);
+        if (user == null)
+            return RedirectToAction("Index");
+
+        var mappedFollowing = _mapper.Map<List<GetFollowDto>>(user.Following);
+        ViewBag.Following = mappedFollowing;
+        ViewBag.AuthUser = authUser;
+        return View(user);
+    }
+
+    [HttpGet("Communities/{userId}")]
+    public async Task<IActionResult> GetCommunities(string userId)
+    {
+        var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
+        if (authUser == null)
+            return RedirectToAction("Index", "SignIn");
+
+        var uuid = Guid.Parse(userId);
+        var user = await _userService.GetAsync(u => u.Id == uuid);
+        if (user == null)
+            return RedirectToAction("Index");
+
+        var mappedCommunityUsers = _mapper.Map<ICollection<GetCommunityUserDto>>(user.MemberCommunities);
+        ViewBag.Communities = mappedCommunityUsers;
+        ViewBag.AuthUser = authUser;
+        return View(user);
+    }
+
+    [HttpGet("LikedPosts/{id}")]
+    public async Task<IActionResult> GetLikedPosts(string id)
+    {
+        var authUser = await _userService.RetrieveUserByPrincipalAsync(User);
+        if (authUser == null)
+            return RedirectToAction("Index", "SignIn");
+
         var uuid = Guid.Parse(id);
         var user = await _userService.GetAsync(u => u.Id == uuid);
         if (user == null)
             return RedirectToAction("Index");
 
-
-        return View();
+        var mappedLikedPosts = _mapper.Map<ICollection<GetPostLikeDto>>(user.LikedPosts);
+        ViewBag.UserLikedPosts = mappedLikedPosts;
+        ViewBag.AuthUser = authUser;
+        return View(user);
     }
 }

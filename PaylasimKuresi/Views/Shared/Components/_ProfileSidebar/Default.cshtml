@@ -1,0 +1,49 @@
+@model GetUserDto
+
+@{
+    var authUser = ViewBag.AuthUser as GetUserDto;
+}
+
+<div class="col-md-3">
+    <div class="profile-info-left" style="top: 20; width: max-content;">
+        <div class="text-center">
+            <div class="profile-img w-shadow">
+                <div class="profile-img-overlay"></div>
+                <img src="@Model.ProfilePictureUrl" alt="Avatar" class="avatar img-circle">
+                @{
+                    if (authUser.Id == Model.Id)
+                    {
+                        <div class="profile-img-caption">
+                            <label for="updateProfilePic" class="upload">
+                                <i class='bx bxs-camera'></i> Güncelle
+                                <input type="file" id="updateProfilePicInput" class="text-center upload">
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+            <p class="profile-fullname mt-3">@Model.FirstName @Model.LastName</p>
+            <p class="profile-username mb-3 text-muted">@@@Model.UserName</p>
+        </div>
+        <div class="intro mt-4">
+            <div class="d-flex">
+                @{
+                    if (Model.Followers.Any(f => f.FollowingPersonID == authUser.Id))
+                    {
+                        <button type="button" class="btn btn-follow mr-3" style="color: #fff; background-color: #007bff;"><i
+                                class='bx bx-check' style="color: #fff;"></i>
+                            Takip Ediliyor</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-follow mr-3"><i class='bx bx-plus'></i>
+                            Takip Et</button>
+                    }
+                }
+                <button type="button" class="btn btn-start-chat" data-toggle="modal" id="createNewMessageBtn"
+                    data-target="#msgModel"><i class='bx bxs-message-rounded'></i>
+                    <span class="fs-8">Mesaj Gönder</span></button>
+            </div>
+        </div>
+    </div>
+</div>
