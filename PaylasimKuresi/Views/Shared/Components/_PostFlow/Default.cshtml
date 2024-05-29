@@ -18,7 +18,7 @@
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left post-dropdown-menu">
+                                @* <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left post-dropdown-menu">
                                     <a href="#" class="dropdown-item" aria-describedby="savePost">
                                         <div class="row">
                                             <div class="col-md-2">
@@ -68,7 +68,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                         <span class="d-block">@item.CreatedAt.ToString("dd/MM/yyyy")<i class='bx bx-globe ml-3'></i></span>
@@ -112,7 +112,7 @@
                     </div>
                     <a href="javascript:void(0)" class="post-card-buttons show-comments" data-item-id="@item.ID"><i
                             class='bx bx-message-rounded mr-2'></i> @item.Comments.Count</a>
-                    <div class="dropdown dropup share-dropup">
+                    @* <div class="dropdown dropup share-dropup">
                         <a href="#" class="post-card-buttons" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <i class='bx bx-share-alt mr-2'></i> Paylaş
@@ -149,7 +149,7 @@
                                 </div>
                             </a>
                         </div>
-                    </div>
+                    </div> *@
                 </div>
                 @await Component.InvokeAsync("_CommentSection", item)
             </div>

@@ -2,19 +2,19 @@
 
 <nav id="navbar-main" class="navbar navbar-expand-lg shadow-sm sticky-top">
     <ul class="navbar-nav mr-5" id="main_menu">
-        <a class="navbar-brand nav-item mr-lg-5" href="/Home/Index"><img src="/template/assets/images/logo-64x64.png"
+        <a class="navbar-brand nav-item mr-lg-5" href="/Home/Index"><img src="/template/assets/images/logo_64x64.png"
                 width="40" height="40" class="mr-3" alt="Logo"></a>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <form class="w-30 mx-2 my-auto d-inline form-inline mr-5">
-            <div class="input-group">
-                <input type="text" class="form-control search-input w-75"
-                    placeholder="Kişileri, toplulukları, gönderileri ve daha fazlasını arayın..." aria-label="Search"
-                    aria-describedby="search-addon">
-                <div class="input-group-append">
-                    <button class="btn search-button" type="button"><i class='bx bx-search'></i></button>
-                </div>
-            </div>
-        </form>
+        @* <form class="w-30 mx-2 my-auto d-inline form-inline mr-5">
+        <div class="input-group">
+        <input type="text" class="form-control search-input w-75"
+        placeholder="Kişileri, toplulukları, gönderileri ve daha fazlasını arayın..." aria-label="Search"
+        aria-describedby="search-addon">
+        <div class="input-group-append">
+        <button class="btn search-button" type="button"><i class='bx bx-search'></i></button>
+        </div>
+        </div>
+        </form> *@
 
         <form class="w-25 mx-2 my-auto d-inline form-inline mr-5">
             <div class="input-group">
@@ -24,38 +24,38 @@
                 </select>
             </div>
         </form>
-        <li class="nav-item btn-group d-mobile">
-            <a href="#" class="nav-link nav-icon nav-links" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="bx bx-plus"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right nav-dropdown-menu">
-                <a href="#" class="dropdown-item" aria-describedby="createGroup">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <i class='bx bx-group post-option-icon'></i>
-                        </div>
-                        <div class="col-md-10">
-                            <span class="fs-9">Group</span>
-                            <small id="createGroup" class="form-text text-muted">Find people with shared
-                                interests</small>
-                        </div>
-                    </div>
-                </a>
-                <a href="#" class="dropdown-item" aria-describedby="createEvent">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <i class='bx bx-calendar post-option-icon'></i>
-                        </div>
-                        <div class="col-md-10">
-                            <span class="fs-9">Event</span>
-                            <small id="createEvent" class="form-text text-muted">bring people together with a public or
-                                private event</small>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </li>
+        @* <li class="nav-item btn-group d-mobile">
+        <a href="#" class="nav-link nav-icon nav-links" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="bx bx-plus"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right nav-dropdown-menu">
+        <a href="#" class="dropdown-item" aria-describedby="createGroup">
+        <div class="row">
+        <div class="col-md-2">
+        <i class='bx bx-group post-option-icon'></i>
+        </div>
+        <div class="col-md-10">
+        <span class="fs-9">Group</span>
+        <small id="createGroup" class="form-text text-muted">Find people with shared
+        interests</small>
+        </div>
+        </div>
+        </a>
+        <a href="#" class="dropdown-item" aria-describedby="createEvent">
+        <div class="row">
+        <div class="col-md-2">
+        <i class='bx bx-calendar post-option-icon'></i>
+        </div>
+        <div class="col-md-10">
+        <span class="fs-9">Event</span>
+        <small id="createEvent" class="form-text text-muted">bring people together with a public or
+        private event</small>
+        </div>
+        </div>
+        </a>
+        </div>
+        </li> *@
         <li class="nav-item dropdown message-drop-li">
             <a href="#" class="nav-link nav-links message-drop" data-toggle="dropdown" role="button"
                 aria-haspopup="true" aria-expanded="false">
@@ -88,9 +88,9 @@
                 <a class="dropdown-item" href="/SignIn/LogOut"><i class='bx bx-undo mr-2'></i> Çıkış yap</a>
             </div>
         </li>
-        <li class="nav-item nav-icon">
-            <a href="settings.html" class="nav-link"><i class="bx bx-cog"></i></a>
-        </li>
+        @* <li class="nav-item nav-icon">
+        <a href="settings.html" class="nav-link"><i class="bx bx-cog"></i></a>
+        </li> *@
     </ul>
     <button type="button" class="btn btn-primary mr-3" id="menu-toggle"><i class='bx bx-align-left'></i></button>
 </nav>
@@ -98,6 +98,30 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        $.ajax({
+            contentType: "application/json",
+            method: "get",
+            url: "/Community/GetAllParticipatedCommunities",
+            success: function (response) {
+                var data = response["participatedCommunities"];
+                $('#communitiesDropdownId').empty();
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var dataHtml = '<option value="' + data[i]["id"] + '">' + data[i]["name"] + '</option>'
+                        $('#communitiesDropdownId').append(dataHtml);
+                    }
+
+                    let selectedId = getQueryParam('id');
+                    console.log(selectedId);
+
+                    $('#communitiesDropdownId').val(selectedId);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error is", xhr.responseText);
+            }
+        });
+
         function getQueryParam(name) {
             let url = window.location.href;
             let urlObj = new URL(url);
@@ -147,28 +171,7 @@
         });
 
         $(document).on("focus", ".communitiesDropdown", function (event) {
-            $.ajax({
-                contentType: "application/json",
-                method: "get",
-                url: "/Community/GetAllParticipatedCommunities",
-                success: function (response) {
-                    var data = response["participatedCommunities"];
-                    $('#communitiesDropdownId').empty();
-                    if (data.length > 0) {
-                        for (var i = 0; i < data.length; i++) {
-                            var dataHtml = '<option value="' + data[i]["id"] + '">' + data[i]["name"] + '</option>'
-                            $('#communitiesDropdownId').append(dataHtml);
-                        }
 
-                        let selectedId = getQueryParam('id');
-                        console.log(selectedId);
-                        $('#communitiesDropdownId').val(selectedId);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error is", xhr.responseText);
-                }
-            });
         });
 
         $(document).on("change", ".communitiesDropdown", function (event) {

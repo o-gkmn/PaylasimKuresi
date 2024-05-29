@@ -6,13 +6,13 @@
 <div class="message-sidepanel">
     <div class="message-profile">
         <div class="wrap">
-            <img src="@user.ProfilePictureUrl" class="online conv-img" alt="Conversation user" />
+            <img src="@user.ProfilePictureUrl" style="border: 0cap;" />
             <p>@user.FirstName @user.LastName</p>
         </div>
     </div>
     <div class="message-search position-relative d-flex">
-        <label for=""><i class='bx bx-search'></i></label>
-        <input type="text" class="form-control search-input" placeholder="Konuşmaları arayın..." />
+        @* <label for=""><i class='bx bx-search'></i></label> *@
+        <input type="text" class="form-control search-input" disabled />
         <button type="button" class="btn btn-create-conversation" data-toggle="modal" data-target="#newConversation"><i
                 class='bx bx-pencil'></i></button>
     </div>
@@ -20,7 +20,7 @@
         <ul class="conversations">
             @foreach (var item in Model)
             {
-                <li class="contact messenger-user" data-conversation-id="@item.ID" onclick="loadConversationPage(this)">
+                <li class="contact messenger-user" id="messangerUser" data-conversation-id="@item.ID">
                     <div class="wrap">
                         @{
                             if (item.ReceiverID != user.Id)
@@ -58,13 +58,13 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function loadConversationPage(element) {
-        var conversation_Id = element.getAttribute("data-conversation-id");
+    $(document).on('click', '.messenger-user', function (event) {
+        var conversation_Id = $(this).attr("data-conversation-id");
 
         $.ajax({
             url: `/Message/UpdateConversationSection`,
             type: 'get',
-            data: { conversationId: conversation_Id.toString() },
+            data: { conversationId: conversation_Id },
             success: function (response) {
                 $('#conversationSection').html(response);
             },
@@ -72,5 +72,6 @@
                 console.error("Error loading conversation page:", error);
             }
         });
-    }
+    });
+
 </script>

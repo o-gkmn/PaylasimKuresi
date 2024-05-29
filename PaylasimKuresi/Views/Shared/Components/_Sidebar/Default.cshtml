@@ -7,13 +7,13 @@
             <li class="list-group-item">
                 <h6>Ana Sayfa</h6>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center sd-active">
+            <li class="list-group-item d-flex justify-content-between align-items-center sd-active" id="flow">
                 <a href="/Home/Index" class="sidebar-item"><i class='bx bxs-home-alt-2 text-primary'></i> Akış</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <a href="/Message/" class="sidebar-item"><i class='bx bxs-chat text-primary'></i> Mesajlar</a>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex justify-content-between align-items-center" id="communities">
                 <a href="/Community" class="sidebar-item"><i class='bx bxs-book-content text-primary'></i>
                     Topluluklar</a>
             </li>
@@ -38,3 +38,28 @@
         </ul>
     </div>
 </div>
+
+<script>
+    function getControllerName() {
+        var url = window.location.pathname; // Get the current path
+        var parts = url.split('/'); // Split the URL by '/'
+        return parts[1]; // Get the second part (controller name)
+    }
+
+    function toggleActiveClass() {
+        var controllerName = getControllerName();
+
+        // Remove sd-active class from both
+        document.getElementById('flow').classList.remove('sd-active');
+        document.getElementById('communities').classList.remove('sd-active');
+
+        // Add sd-active class based on the controller name
+        if (controllerName.toLowerCase() === 'home') {
+            document.getElementById('flow').classList.add('sd-active');
+        } else if (controllerName.toLowerCase() === 'community') {
+            document.getElementById('communities').classList.add('sd-active');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", toggleActiveClass);
+</script>

@@ -29,14 +29,14 @@
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Gönder"><i
                                                                 class='bx bx-send'></i></button>
-                                                        <button type="button" class="btn comment-form-btn"
+                                                        @* <button type="button" class="btn comment-form-btn"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Emoji Ekle"><i
                                                                 class='bx bxs-smiley-happy'></i></button>
                                                         <button type="button"
                                                             class="btn comment-form-btn comment-form-btn"
                                                             data-toggle="tooltip" data-placement="top"
-                                                            title="Fotoğraf ekle"><i class='bx bx-camera'></i></button>
+                                                            title="Fotoğraf ekle"><i class='bx bx-camera'></i></button> *@
                                                     </div>
                                                 </div>
                                             </div>
@@ -47,12 +47,12 @@
                             @foreach (var item in Model.Comments)
                             {
                                 <li class="media">
-                                    <a href="#" class="pull-left">
+                                    <a href="/Profile/Index/@item.User.Id" class="pull-left">
                                         <img src=@item.User.ProfilePictureUrl alt="" class="img-circle">
                                     </a>
                                     <div class="media-body">
                                         <div class="d-flex justify-content-between align-items-center w-100">
-                                            <strong class="text-gray-dark"><a href="#" class="fs-8">@item.User.FirstName @item.User.LastName</a></strong>
+                                            <strong class="text-gray-dark"><a href="/Profile/Index/@item.User.Id" class="fs-8">@item.User.FirstName @item.User.LastName</a></strong>
                                             <a href="#"><i class='bx bx-dots-horizontal-rounded'></i></a>
                                         </div>
                                         <span class="d-block comment-created-time">@item.SentAt.ToString("dd/MM/yyyy hh:mm")</span>
@@ -75,7 +75,7 @@
                                                 
                                                 }
                                             }
-                                            <button type="button" class="btn btn-link fs-8">Yanıt Ver</button>
+                                            @* <button type="button" class="btn btn-link fs-8">Yanıt Ver</button> *@
                                         </div>
                                     </div>
                                 </li>

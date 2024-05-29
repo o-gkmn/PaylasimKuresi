@@ -29,7 +29,7 @@
                             {
                                 <img src="@receiverUser.ProfilePictureUrl" class="messenger-user"
                                     alt="Convarsation user image" />
-                                <a href="#" class="message-profile-name">@receiverUser.FirstName @receiverUser.LastName</a>
+                                <a href="/Profile/Index/@receiverUser.Id" class="message-profile-name">@receiverUser.FirstName @receiverUser.LastName</a>
                             }
                             else
                             {
@@ -54,7 +54,7 @@
                             else if (item.ReceiverID == user.Id)
                             {
                                 <li class="message-receive">
-                                    <img src="@item.Receiver.ProfilePictureUrl" alt="Conversation user image" />
+                                    <img src="@item.Sender.ProfilePictureUrl" alt="Conversation user image" />
                                     <p>@item.Content</p>
                                 </li>
                             }
@@ -73,13 +73,13 @@
                                         <input type="hidden" value="@receiverUser.Id" id="ReceiverId">
                                         <input type="hidden" value="@receiverUser.UserName" id="ReceiverUserName">
                                     }
-                                    <input type="text" class="form-control search-input" placeholder="Type a message..."
+                                    <input type="text" class="form-control search-input" placeholder="Bir mesaj yazın..."
                                         aria-label="Type a message..." aria-describedby="button-addon2" id="Content">
                                     <div class="input-group-append">
-                                        <button class="btn search-button" type="button" id="button-addon2 send-message">
+                                        @* <button class="btn search-button" type="button" id="button-addon2 send-message">
                                             <img src="/template/assets/images/icons/messenger/m-smile.png"
                                                 alt="Messenger icons">
-                                        </button>
+                                        </button> *@
                                     </div>
                                 </div>
                                 <button type="button" class="btn search-button" id="postMessage">
@@ -159,10 +159,11 @@
                 data: JSON.stringify({ ReceiverID: receiver_id.toString(), Content: content.toString(), Status: "Send", ReceiverUserName: receiver_userName }),
                 success: function (response) {
                     let { $id, ...newResponse } = response["result"];
+                    console.log(newResponse);
                     var data = JSON.stringify(newResponse);
                     connection.invoke("SendMessageToUser", data).catch(err => console.error(err.toString()));
 
-                    const messageContent = newResponse["Content"];
+                    const messageContent = newResponse.content;
                     let msgHtml = `
                         <li class="message-reply">
                             <p>${messageContent}</p>

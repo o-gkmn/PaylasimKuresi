@@ -40,7 +40,8 @@ public class ProfileController : Controller
         if (user == null)
             return RedirectToAction("Index", "Home");
 
-        ViewBag.UserLikedPosts = user.LikedPosts;
+        var mappedLikedPosts = _mapper.Map<ICollection<GetPostLikeDto>>(user.LikedPosts);
+        ViewBag.UserLikedPosts = mappedLikedPosts;
         ViewBag.UserLikedComments = user.CommentLikes;
         ViewBag.AuthUser = authUser;
         return View(user);
